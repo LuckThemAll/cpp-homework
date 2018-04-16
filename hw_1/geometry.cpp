@@ -1,11 +1,6 @@
 #include "geometry.h"
-#include <cmath>
 
 #define EPS 0.00000001
-
-std::vector<Point> Line::intersect(Base& obj) {
-    return obj.intersect(*this);
-}
 
 std::vector<Point> Line::intersect(Line& line) {
     std::vector<Point> result;
@@ -30,10 +25,6 @@ std::vector<Point> Line::intersect(Line& line) {
         result.push_back(point);
     }
     return result;
-}
-
-Line PolyLine::get_line(int index) {
-    return Line(this->get_point(index), this->get_point(index+1));
 }
 
 std::vector<Point> Line::intersect(PolyLine& poly_line) {
@@ -96,14 +87,6 @@ double PolyLine::length() {
     return result;
 }
 
-std::vector<Point> PolyLine::intersect(Base& obj) {
-    return obj.intersect(*this);
-}
-
-std::vector<Point> PolyLine::intersect(Line& line) {
-    return line.intersect(*this);
-}
-
 std::vector<Point> PolyLine::intersect(PolyLine& polyline) {
     std::vector<Point> result;
     for (int i = 0; i < this->p_counts()-1; i++) {
@@ -124,18 +107,6 @@ std::vector<Point> PolyLine::intersect(Circle& circle) {
             result.push_back(point);
     }
     return result;
-}
-
-std::vector<Point> Circle::intersect(Base& obj) {
-    return obj.intersect(*this);
-}
-
-std::vector<Point> Circle::intersect(Line& line) {
-    return line.intersect(*this);
-}
-
-std::vector<Point> Circle::intersect(PolyLine& polyline) {
-    return polyline.intersect(*this);
 }
 
 std::vector<Point> Circle::intersect(Circle& circle) {

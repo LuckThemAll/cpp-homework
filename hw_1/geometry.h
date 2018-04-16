@@ -9,12 +9,12 @@ class Circle;
 
 class Point {
 public:
-    Point() = default;
-    Point(double x, double y) : x(x), y(y) {};
-    double get_x(){ return this->x; };
-    double get_y(){ return this->y; };
-    void set_x(double x){this->x = x; };
-    void set_y(double y){this->y = y; };
+    Point(){};
+    Point(double x, double y) : x(x), y(y) {}
+    double get_x(){ return this->x; }
+    double get_y(){ return this->y; }
+    void set_x(double x){this->x = x; }
+    void set_y(double y){this->y = y; }
 
 private:
     double x, y;
@@ -37,7 +37,7 @@ public:
     double length() override { return sqrt(
                 pow(this->get_first_point().get_x() - this->get_second_point().get_x(), 2) +
                 pow(this->get_first_point().get_x() - this->get_second_point().get_x(), 2)); };
-    std::vector<Point> intersect(Base&) override;
+    std::vector<Point> intersect(Base& obj ) override{ return obj.intersect(*this); };
     std::vector<Point> intersect(Line&) override;
     std::vector<Point> intersect(PolyLine&) override;
     std::vector<Point> intersect(Circle&) override;
@@ -50,10 +50,10 @@ public:
     explicit PolyLine(std::vector<Point> points) : points(std::move(points)){};
     int p_counts(){ return this->points.size(); };
     Point get_point(int index) { return this->points[index]; }
-    Line get_line(int index);
+    Line get_line(int index) { return Line(this->get_point(index), this->get_point(index+1)); };
     double length() override;
-    std::vector<Point> intersect(Base&) override;
-    std::vector<Point> intersect(Line&) override;
+    std::vector<Point> intersect(Base& obj) override { return obj.intersect(*this); };
+    std::vector<Point> intersect(Line& obj) override { return obj.intersect(*this); };
     std::vector<Point> intersect(PolyLine&) override;
     std::vector<Point> intersect(Circle&) override;
 
@@ -67,9 +67,9 @@ public:
     Point get_center() { return this->center; };
     double get_radius() { return this->radius; };
     double length() override { return 2*M_PI*this->get_radius(); };
-    std::vector<Point> intersect(Base&) override;
-    std::vector<Point> intersect(Line&) override;
-    std::vector<Point> intersect(PolyLine&) override;
+    std::vector<Point> intersect(Base& obj) override { return obj.intersect(*this); };
+    std::vector<Point> intersect(Line& line) override { return line.intersect(*this); };
+    std::vector<Point> intersect(PolyLine& polyline) override { return polyline.intersect(*this); };
     std::vector<Point> intersect(Circle&) override;
 private:
     Point center;
