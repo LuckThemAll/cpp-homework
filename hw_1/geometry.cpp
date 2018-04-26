@@ -2,13 +2,13 @@
 
 #define EPS 0.00000001
 
-std::vector<Point> Line::intersect(Line& line) {
+std::vector<Point> Line::intersect(const Line& line) const {
     std::vector<Point> result;
     double x1, y1, x2, y2, x3, y3, x4, y4;
-    x1 = this->get_first_point().get_x();
-    y1 = this->get_first_point().get_y();
-    x2 = this->get_second_point().get_x();
-    y2 = this->get_second_point().get_y();
+    x1 = get_first_point().get_x();
+    y1 = get_first_point().get_y();
+    x2 = get_second_point().get_x();
+    y2 = get_second_point().get_y();
     x3 = line.get_first_point().get_x();
     y3 = line.get_first_point().get_y();
     x4 = line.get_second_point().get_x();
@@ -27,21 +27,21 @@ std::vector<Point> Line::intersect(Line& line) {
     return result;
 }
 
-std::vector<Point> Line::intersect(PolyLine& poly_line) {
+std::vector<Point> Line::intersect(const PolyLine& poly_line) const {
     std::vector<Point> result;
     for (int i = 0; i < poly_line.p_counts()-1; i++) {
         Line line = poly_line.get_line(i);
-        std::vector<Point> points = this->intersect(line);
+        std::vector<Point> points = intersect(line);
         for (auto point : points)
             result.push_back(point);
     }
     return result;
 }
 
-std::vector<Point> Line::intersect(Circle& circle) {
+std::vector<Point> Line::intersect(const Circle& circle) const {
     std::vector<Point> result;
-    Point a = this->get_first_point();
-    Point b = this->get_second_point();
+    Point a = get_first_point();
+    Point b = get_second_point();
     Point o = circle.get_center();
     double r = circle.get_radius();
 
@@ -79,18 +79,18 @@ std::vector<Point> Line::intersect(Circle& circle) {
     return result;
 }
 
-double PolyLine::length() {
+double PolyLine::length() const {
     double result = 0;
-    for (int i = 0; i < this->p_counts()-1; i++){
-        result += this->get_line(i).length();
+    for (int i = 0; i < p_counts()-1; i++){
+        result += get_line(i).length();
     }
     return result;
 }
 
-std::vector<Point> PolyLine::intersect(PolyLine& polyline) {
+std::vector<Point> PolyLine::intersect(const PolyLine& polyline) const {
     std::vector<Point> result;
-    for (int i = 0; i < this->p_counts()-1; i++) {
-        Line line = this->get_line(i);
+    for (int i = 0; i < p_counts()-1; i++) {
+        Line line = get_line(i);
         std::vector<Point> points = line.intersect(polyline);
         for (auto point : points)
             result.push_back(point);
@@ -98,10 +98,10 @@ std::vector<Point> PolyLine::intersect(PolyLine& polyline) {
     return result;
 }
 
-std::vector<Point> PolyLine::intersect(Circle& circle) {
+std::vector<Point> PolyLine::intersect(const Circle& circle) const {
     std::vector<Point> result;
-    for (int i = 0; i < this->p_counts()-1; i++) {
-        Line line = this->get_line(i);
+    for (int i = 0; i < p_counts()-1; i++) {
+        Line line = get_line(i);
         std::vector<Point> points = line.intersect(circle);
         for (auto point : points)
             result.push_back(point);
@@ -109,28 +109,28 @@ std::vector<Point> PolyLine::intersect(Circle& circle) {
     return result;
 }
 
-std::vector<Point> Circle::intersect(Circle& circle) {
+std::vector<Point> Circle::intersect(const Circle& circle) const {
     std::vector<Point> result;
 
-    double d = sqrt(pow(circle.get_center().get_x() - this->get_center().get_x(), 2) +
-                    pow(circle.get_center().get_y() - this->get_center().get_y(), 2));
-    bool nesting = abs(circle.get_radius() - this->get_radius()) > d;
-    bool no_intersection = d > circle.get_radius() + this->get_radius();
+    double d = sqrt(pow(circle.get_center().get_x() - get_center().get_x(), 2) +
+                    pow(circle.get_center().get_y() - get_center().get_y(), 2));
+    bool nesting = abs(circle.get_radius() - get_radius()) > d;
+    bool no_intersection = d > circle.get_radius() + get_radius();
     if (!(nesting || no_intersection)) {
-        double b =(pow(this->get_radius(), 2) - pow(circle.get_radius(), 2) + pow(d, 2)) / (2 * d);
+        double b =(pow(get_radius(), 2) - pow(circle.get_radius(), 2) + pow(d, 2)) / (2 * d);
         double a = d - b;
         Point p0{};
-        p0.set_x(circle.get_center().get_x() + a / d * (this->get_center().get_x() - circle.get_center().get_x()));
-        p0.set_y(circle.get_center().get_y() + a / d * (this->get_center().get_y() - circle.get_center().get_y()));
-        if (d == circle.get_radius() + this->get_radius())
+        p0.set_x(circle.get_center().get_x() + a / d * (get_center().get_x() - circle.get_center().get_x()));
+        p0.set_y(circle.get_center().get_y() + a / d * (get_center().get_y() - circle.get_center().get_y()));
+        if (d == circle.get_radius() + get_radius())
             result.push_back(p0);
         else {
             double h = sqrt(pow(circle.get_radius(), 2) - pow(a, 2));
             Point p3{}, p4{};
-            p3.set_x(p0.get_x() + (this->get_center().get_y() - circle.get_center().get_y()) * h / d);
-            p3.set_y(p0.get_y() - (this->get_center().get_x() - circle.get_center().get_x()) * h / d);
-            p4.set_x(p0.get_x() - (this->get_center().get_y() - circle.get_center().get_y()) * h / d);
-            p4.set_y(p0.get_y() + (this->get_center().get_x() - circle.get_center().get_x()) * h / d);
+            p3.set_x(p0.get_x() + (get_center().get_y() - circle.get_center().get_y()) * h / d);
+            p3.set_y(p0.get_y() - (get_center().get_x() - circle.get_center().get_x()) * h / d);
+            p4.set_x(p0.get_x() - (get_center().get_y() - circle.get_center().get_y()) * h / d);
+            p4.set_y(p0.get_y() + (get_center().get_x() - circle.get_center().get_x()) * h / d);
             result.push_back(p3);
             result.push_back(p4);
         }
