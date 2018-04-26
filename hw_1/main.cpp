@@ -2,15 +2,16 @@
 #include "catch.hpp"
 #include "geometry.h"
 #include <string>
+#include <memory>
 
 TEST_CASE("Contain objects of different classes in one vector") {
-    std::vector<Base*> vec(3);
+    std::vector<std::shared_ptr<Base>> vec(3);
     Point a, b;
     a.set_x(0);
     a.set_y(2);
     b.set_x(4);
     b.set_y(6);
-    vec[0] = new Line(a, b);
+    vec[0] = std::make_shared<Line>(a, b);
 
     std::vector<Point> points(3);
     points[0].set_x(5);
@@ -19,12 +20,12 @@ TEST_CASE("Contain objects of different classes in one vector") {
     points[1].set_y(8);
     points[2].set_x(11);
     points[2].set_y(-7);
-    vec[1] = new PolyLine(points);
+    vec[1] = std::make_shared<PolyLine>(points);
 
     Point c;
     c.set_x(4);
     c.set_y(-9);
-    vec[2] = new Circle(c, 8.0);
+    vec[2] = std::make_shared<Circle>(c, 8);
 
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
@@ -91,8 +92,8 @@ TEST_CASE("Intersect line with line", "[]") {
         Point expected_point(0.0, 0.0);
         std::vector<Point> result = line1.intersect(line2);
 
-        REQUIRE(result[0].get_x() == expected_point.get_x());
-        REQUIRE(result[0].get_y() == expected_point.get_y());
+        CHECK(result[0].get_x() == expected_point.get_x());
+        CHECK(result[0].get_y() == expected_point.get_y());
     }
 
     SECTION("Same lines") {
@@ -144,9 +145,11 @@ TEST_CASE("Get line from broken line with wrong index", "[]") {
     points[2].set_x(5);
     points[2].set_y(1);
     PolyLine broken_line(points);
+    Line line(points[1], points[2]);
 
     try {
-        Line line = broken_line.get_line(4);
+        Line line = broken_line.get_line(3);
+        REQUIRE(broken_line.get_line(3).length() == line.length());
     }
     catch (std::length_error exp) {
         std::string mes = exp.what();
