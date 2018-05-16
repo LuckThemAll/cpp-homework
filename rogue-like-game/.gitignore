@@ -1,2 +1,5 @@
 Debog/
 *.vcsproj
+*.filters
+*.user
+*.sln
