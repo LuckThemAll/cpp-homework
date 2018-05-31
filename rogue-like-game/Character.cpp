@@ -3,20 +3,11 @@
 
 void Character::ñollide(ActiveCharacter & other)
 {
-	this->ñollide(*static_cast<Character*>(&other));
+	this->ñollide(other);
 }
 
 void Character::collide(StaticCharacter & other)
 {
-	this->ñollide(*static_cast<Character*>(&other));
+	this->ñollide(other);
 }
 
-void Knight::collide(Monster & other)
-{
-	take_damage(other.get_damage());
-}
-
-void Monster::collide(Monster & other)
-{
-	take_damage(other.get_damage());
-}

@@ -11,12 +11,12 @@ class DamageEvent;
 
 class EventManager {
 public:
-	static EventManager& exemplar;
+	static EventManager &exemplar;
 
-	void trigger_all(std::shared_ptr<Map> map);
+	//void trigger_all(std::vector<std::vector<std::shared_ptr<MapCell>>> &map);
 
-	void add_damage(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage);
-	void add_move(std::shared_ptr<Character> character, Point to);
+	//void add_damage(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage);
+	//void add_move(std::shared_ptr<Character> character, Point to);
 
 private:
 	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _move_events;
@@ -25,17 +25,18 @@ private:
 
 class Event {
 public:
-	virtual void trigger(std::shared_ptr<Map> map) = 0;
+	virtual void trigger(std::vector<std::vector<std::shared_ptr<MapCell>>> &map) = 0;
 };
 
 class MoveEvent : public Event {
 public:
-	MoveEvent(std::shared_ptr<Character> character, Point to) : _character(character), _to(to) {};
+	MoveEvent(std::shared_ptr<Character> character, int to_row, int to_col) 
+		: _character(character), _to_row(to_row), _to_col(to_col)  {};
 
-	void trigger(std::shared_ptr<Map> map) override;
+	//void trigger(std::vector<std::vector<std::shared_ptr<MapCell>>> &map) override;
 private:
 	std::shared_ptr<Character> _character;
-	Point _to;
+	int _to_row, _to_col;
 };
 
 class DamageEvent : public Event {
@@ -43,7 +44,7 @@ public:
 	DamageEvent(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage) 
 		: _from(from), _to(to), _damage(damage) {};
 
-	void trigger(std::shared_ptr<Map> map) override;
+	//void trigger(std::vector<std::vector<std::shared_ptr<MapCell>>> &map) override;
 private:
 	std::shared_ptr<Character> _from;
 	std::shared_ptr<Character> _to;
