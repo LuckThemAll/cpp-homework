@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "Map.h"
+#include "EventManager.h"
 
 
 class ActiveCharacter;
@@ -14,6 +15,7 @@ class Monster;
 class Knight;
 class Zombie;
 class Zombie;
+class EventManager;
 
 class Map; 
 
@@ -24,16 +26,22 @@ public:
 	virtual void ñollide(Character &other) {};
 	virtual void ñollide(ActiveCharacter &other);
 	virtual void collide(StaticCharacter &other);
+	int get_col() { return _col; }
+	int get_row() { return _row; }
+	std::shared_ptr<Character> get_ptr() { return shared_from_this(); };
+protected:
+	int _col, _row;
+
 };
 
 class ActiveCharacter : public Character {
 public:
+	ActiveCharacter() {};
 	void ñollide(Character &other) override { other.ñollide(*this); };
 	void take_damage(double dmg) { _hp -= dmg; }
 	double get_damage() { return _dmg; }
-	void move_direction(std::shared_ptr<Map> map, int to_row, int to_col);
+	virtual void move_to(std::shared_ptr<Map> map, int to_col, int to_row, EventManager event_manager) = 0;
 protected:
-	int col, row;
 	double _hp;
 	double _dmg;
 };
@@ -45,6 +53,7 @@ class StaticCharacter : public Character {
 class Knight : public ActiveCharacter {
 public:
 	void ñollide(Character &other) override { other.ñollide(*this); };
+	void move_to(std::shared_ptr<Map> map, int to_col, int to_row, EventManager event_manager) override;
 	//void collide(Monster &other);
 };
 

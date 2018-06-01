@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Character.h"
+#include <algorithm>
 
 class Map;
 class MapCell;
@@ -28,6 +29,10 @@ public:
 	Map(std::vector<std::vector<std::shared_ptr<MapCell>>> map) : _map(map) {};
 	std::shared_ptr<MapCell> get_cell(int col, int row) { return _map[row][col]; }
 	auto get_map() { return &_map; };
+	int get_cols_num() { return _map.size(); }
+	int get_rows_num() { return _map[0].size(); }
+	bool is_inrange(int row, int col) { return get_cols_num() <= col && get_rows_num() <= row && col > -1 && row > -1; };
+	void move_character(int from_row, int from_col, int to_row, int to_col);
 private:
 	std::vector<std::vector<std::shared_ptr<MapCell>>> _map;
 };
