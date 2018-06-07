@@ -5,12 +5,6 @@
 #include <fstream>
 
 
-Game::Game(std::shared_ptr<Map> map, std::shared_ptr<Knight> knight)
-{
-	_map = map; 
-	_knight = knight;
-}
-
 void Game::make_map()
 {
 	std::ifstream file;
@@ -36,6 +30,7 @@ void Game::make_map()
 			}
 		}
 	}
+	int sada = 0; //debug
 }
 
 void Game::draw() {

@@ -26,14 +26,14 @@ private:
 
 class Map {
 public:
-	Map(std::vector<std::vector<std::shared_ptr<MapCell>>> map) : _map(map) {};
+	Map(std::vector<std::vector<std::shared_ptr<MapCell>>> map) : _map(map) {}
 	std::shared_ptr<MapCell> get_cell(int col, int row) { return _map[col][row]; }
 	void set_cell(int col, int row, std::shared_ptr<MapCell> cell);
 	auto get_map() { return &_map; };
-	int get_cols_num() { return _map.size(); }
-	int get_rows_num() { return _map[0].size(); }
+	int get_cols_num() { return (_map.size()); }
+	int get_rows_num() { return (_map[0].size()); }
 	std::vector<std::shared_ptr<MapCell>> &get_col(int col) { return _map[col]; }
-	bool is_inrange(int row, int col) { return get_cols_num() <= col && get_rows_num() <= row && col > -1 && row > -1; };
+	bool is_inrange(int col, int row);
 	void move_character(int from_col, int from_row, int to_col, int to_row, std::shared_ptr<Character> replace_actor = nullptr);
 private:
 	std::vector<std::vector<std::shared_ptr<MapCell>>> _map;
