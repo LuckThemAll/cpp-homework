@@ -29,6 +29,7 @@ public:
 	virtual void ñollide(ActiveCharacter &other);
 	virtual void collide(StaticCharacter &other);
 	virtual char get_sign() = 0;
+
 	int get_col() { return _col; }
 	int get_row() { return _row; }
 	void set_col(int col) { _col = col; };

@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "Map.h"
 
+void Map::set_cell(int col, int row, std::shared_ptr<MapCell> cell)
+{
+	_map[col][row] = cell;
+}
+
 void Map::move_character(int from_col, int from_row, int to_col, int to_row, std::shared_ptr<Character> replace_actor)
 {
 	replace_actor = std::make_shared<EmptyFloor>(from_col, from_row);
