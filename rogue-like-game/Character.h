@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "Map.h"
 #include "EventManager.h"
 
 
@@ -49,7 +48,7 @@ public:
 	void ñollide(Character &other) override { other.ñollide(*this); };
 	void take_damage(double dmg) { _hp -= dmg; }
 	double get_damage() { return _dmg; }
-	virtual void move_to(std::shared_ptr<Map> map, int to_col, int to_row, EventManager event_manager) = 0;
+	virtual void move_to(int to_col, int to_row, EventManager event_manager) = 0;
 protected:
 	double _hp;
 	double _dmg;
@@ -68,7 +67,7 @@ public:
 	Knight() {};
 	Knight(int col, int row) : ActiveCharacter(col, row) {};
 	void ñollide(Character &other) override { other.ñollide(*this); };
-	void move_to(std::shared_ptr<Map> map, int to_col, int to_row, EventManager event_manager) override;
+	void move_to(int to_col, int to_row, EventManager event_manager) override;
 	char get_sign() override { return 'K'; };
 	//void collide(Monster &other);
 };

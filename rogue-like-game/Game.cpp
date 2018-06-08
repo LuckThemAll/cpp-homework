@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 #include <string>
-#include "include\curses.h"
+#include "curses.h"
 #include <fstream>
 
 

@@ -26,10 +26,11 @@ private:
 
 class Map {
 public:
+	Map() {};
 	Map(std::vector<std::vector<std::shared_ptr<MapCell>>> map) : _map(map) {}
 	std::shared_ptr<MapCell> get_cell(int col, int row) { return _map[col][row]; }
 	void set_cell(int col, int row, std::shared_ptr<MapCell> cell);
-	auto get_map() { return &_map; };
+	auto get_map() { return &_map; }
 	int get_cols_num() { return (_map.size()); }
 	int get_rows_num() { return (_map[0].size()); }
 	std::vector<std::shared_ptr<MapCell>> &get_col(int col) { return _map[col]; }
