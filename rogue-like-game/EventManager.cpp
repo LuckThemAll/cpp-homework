@@ -4,7 +4,6 @@
 EventManager::EventManager()
 {
 	_move_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
-
 	_events_pool.push_back(_move_events);
 }
 

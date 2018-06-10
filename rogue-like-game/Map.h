@@ -12,15 +12,15 @@ class Character;
 
 class MapCell {
 public:
-	MapCell(std::shared_ptr<StaticCharacter> floor, std::shared_ptr<Character> character) 
+	MapCell(std::shared_ptr<Character> floor, std::shared_ptr<Character> character)
 		: _floor(floor), _character(character) {}
 	void set_character(std::shared_ptr<Character> character) { _character = character; }
-	void set_floor(std::shared_ptr<StaticCharacter> floor) { _floor = floor; }
+	void set_floor(std::shared_ptr<Character> floor) { _floor = floor; }
 	std::shared_ptr<Character> get_character() { return _character; }
-	std::shared_ptr<StaticCharacter> get_floor() { return _floor; }
+	std::shared_ptr<Character> get_floor() { return _floor; }
 
 private:
-	std::shared_ptr<StaticCharacter> _floor;
+	std::shared_ptr<Character> _floor;
 	std::shared_ptr<Character> _character;
 };
 

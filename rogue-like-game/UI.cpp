@@ -16,19 +16,19 @@ void UI::start_game()
 		int key = getch();
 		switch (key) {
 		case 119: {
-			game.knight()->move_to(-1, 0, game.map(), event_manager);
+			game.knight()->move_to(-1, 0, game.map());
 			break;
 		}
 		case 115: {
-			game.knight()->move_to(1, 0, game.map(), event_manager);
+			game.knight()->move_to(1, 0, game.map());
 			break;
 		}
 		case 100: {
-			game.knight()->move_to(0, 1, game.map(), event_manager);
+			game.knight()->move_to(0, 1, game.map());
 			break;
 		}
 		case 97: {
-			game.knight()->move_to(0, -1, game.map(), event_manager);
+			game.knight()->move_to(0, -1, game.map());
 			break;
 		}
 		default: {

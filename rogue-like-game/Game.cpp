@@ -18,11 +18,15 @@ void Game::make_map()
 		for (int j = 0; j < width; ++j) {
 			file >> s;
 			if (i == 0 && j == 0) {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Floor>(i, j), knight()));
+				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j, '.'), knight()));
+				continue;
+			}
+			if (i == 2 && j == 2) {
+				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j, '.'), std::make_shared<Wall>(i, j)));
 				continue;
 			}
 			if (s == '.') {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Floor>(i, j), std::make_shared<EmptyFloor>(i, j)));
+				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j, '.'), std::make_shared<Character>(i, j, '.')));
 			}
 		}
 	}
@@ -37,7 +41,7 @@ void Game::draw() {
 	for (int i = 0; i < _map->get_cols_num(); i++) {
 		for (int j = 0; j < _map->get_rows_num(); j++) {
 			char k[2];
-			k[0] = _map->get_cell(i, j)->get_character()->get_sign();
+			k[0] = _map->get_cell(i, j)->get_character()->get_symbol();
 			k[1] = '\0';
 			printw(k);
 		}
