@@ -18,11 +18,11 @@ void Game::make_map()
 		for (int j = 0; j < width; ++j) {
 			file >> s;
 			if (i == 0 && j == 0) {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Lava>(i, j), knight()));
+				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Floor>(i, j), knight()));
 				continue;
 			}
 			if (s == '.') {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<StaticCharacter>(i, j), std::make_shared<EmptyFloor>(i, j)));
+				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Floor>(i, j), std::make_shared<EmptyFloor>(i, j)));
 			}
 		}
 	}
