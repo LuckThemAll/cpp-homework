@@ -21,6 +21,7 @@ void EventManager::trigger_all(std::shared_ptr<Map> map_)
 			ev->pop();
 		}
 	}
+	int a = 0;
 }
 
 void EventManager::add_move(std::shared_ptr<Character> character, int to_col, int to_row)
@@ -30,8 +31,8 @@ void EventManager::add_move(std::shared_ptr<Character> character, int to_col, in
 
 void MoveEvent::trigger(std::shared_ptr<Map> map)
 {
-	if (map->is_inrange(_character->get_row() + _to_row, _character->get_col() + _to_col)) {
+	if (map->is_inrange(_to_row, _to_col)) {
 		map->move_character(_character->get_col(), _character->get_row(),
-			_character->get_col() + _to_col, _character->get_row() + _to_row);
+			_to_col, _to_row);
 	}
 }
