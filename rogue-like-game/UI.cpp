@@ -11,7 +11,7 @@ void UI::start_game()
 	Game game(std::make_shared<Map>(), std::make_shared<Knight>(0, 0));
 	game.make_map();
 	game.draw();
-	EventManager event_manager;
+	//EventManager event_manager;
 	while (true) {
 		int key = getch();
 		switch (key) {
@@ -35,7 +35,7 @@ void UI::start_game()
 			continue;
 		}
 		}
-		game.make_turn(event_manager);
+		game.make_turn(EventManager::instance());
 		game.draw();
 	}
 }

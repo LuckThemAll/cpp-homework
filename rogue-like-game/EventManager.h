@@ -13,6 +13,7 @@ class Map;
 
 class EventManager {
 public:
+	static EventManager& instance();
 	EventManager();
 	void trigger_all(std::shared_ptr<Map> map);
 

@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "EventManager.h"
 
+EventManager & EventManager::instance()
+{
+	static EventManager e;
+	return e;
+}
+
 EventManager::EventManager()
 {
 	_move_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();

@@ -7,7 +7,7 @@ class Character;
 class Knight;
 class Wall;
 
-class Character
+class Character : public std::enable_shared_from_this<Character>
 {
 public:
 	Character(int col, int row, char symbol) : _col(col), _row(row), _symbol(symbol) {};
@@ -17,6 +17,7 @@ public:
 	void set_pos(int col, int row) { _col = col; _row = row; }
 	virtual void collide(Character &other, const std::shared_ptr<Map> map);
 	virtual void collide(Knight &other, const std::shared_ptr<Map> map);
+	std::shared_ptr<Character> get_ptr() { return shared_from_this(); }
 
 private:
 	char _symbol;
