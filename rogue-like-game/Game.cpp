@@ -11,27 +11,27 @@ void Game::make_map()
 	int height, width;
 	file >> height >> width;
 	char s;
-	_map->get_map()->resize(height);
-	auto a = _map;
+	_map_ptr->get_map()->resize(height);
+	auto a = _map_ptr;
 	for (int i = 0; i < height; ++i) {
-		_map->get_col(i).resize(width);
+		_map_ptr->get_col(i).resize(width);
 		for (int j = 0; j < width; ++j) {
 			file >> s;
 			if (i == 0 && j == 0) {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), knight()));
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), knight()));
 				continue;
 			}
 			if (i == 2 && j == 2) {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Wall>(i, j)));
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Wall>(i, j)));
 				continue;
 			}
 			if (s == '.') {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<EmptyFloor>(i, j)));
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<EmptyFloor>(i, j)));
 				continue;
 			}
 			if (s == 'M') {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Monster>(i, j)));
-				auto a = _map->get_cell(i, j)->get_character();
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Monster>(i, j)));
+				auto a = _map_ptr->get_cell(i, j)->get_character();
 				_active_characters.push_back( a);
 				continue;
 			}
@@ -44,10 +44,10 @@ void Game::draw() {
 	noecho();
 	raw();
 	clear();
-	for (int i = 0; i < _map->get_cols_num(); i++) {
-		for (int j = 0; j < _map->get_rows_num(); j++) {
+	for (int i = 0; i < _map_ptr->get_cols_num(); i++) {
+		for (int j = 0; j < _map_ptr->get_rows_num(); j++) {
 			char k[2];
-			k[0] = _map->get_cell(i, j)->get_character()->get_symbol();
+			k[0] = _map_ptr->get_cell(i, j)->get_character()->get_symbol();
 			k[1] = '\0';
 			printw(k);
 		}
