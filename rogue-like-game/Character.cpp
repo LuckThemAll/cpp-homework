@@ -66,13 +66,20 @@ int sgn(int val) {
 	return (0 < val) - (val < 0);
 }
 
+void Monster::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
+{
+	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
+}
+
 void Monster::make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map)
 {
 	int col_diff = abs(get_col() - knight_col);
 	int row_diff = abs(get_row() - knight_row);
-	if (col_diff < get_visibility() && row_diff < get_visibility()) {
+	col_diff < get_visibility() && row_diff < get_visibility() ?
 		col_diff > row_diff ? move_to(sgn(knight_col - get_col()), 0, map) :
-			col_diff < row_diff ? move_to(0, sgn(knight_row - get_row()), map) :
-			rand() > RAND_MAX / 2 ? move_to(sgn(knight_col - get_col()), 0, map) : move_to(0, sgn(knight_row - get_row()), map);
-	}
+		col_diff < row_diff ? move_to(0, sgn(knight_row - get_row()), map) :
+		rand() > RAND_MAX / 2 ? move_to(sgn(knight_col - get_col()), 0, map) : move_to(0, sgn(knight_row - get_row()), map) :
+		rand() > RAND_MAX / 2 ? rand() > RAND_MAX / 2 ? move_to(-1, 0, map) : move_to(1, 0, map) :
+		rand() > RAND_MAX / 2 ? move_to(0, -1, map) : move_to(0, 1, map);
+	
 }
