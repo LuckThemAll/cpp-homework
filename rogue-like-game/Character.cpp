@@ -12,11 +12,6 @@ void Character::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 	other.collide(*this, map);
 }
 
-void Character::collide(Knight & other, const std::shared_ptr<Map> map)
-{
-	other.collide(*this, map);
-}
-
 void Character::collide(EmptyFloor & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
@@ -33,7 +28,7 @@ void ActiveCharacter::move_to(int to_col, int to_row, const std::shared_ptr<Map>
 
 void ActiveCharacter::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
-	//nothing
+	other.collide(*this, map);
 }
 
 void ActiveCharacter::collide(Character & other, const std::shared_ptr<Map> map)
@@ -46,9 +41,9 @@ void ActiveCharacter::collide(EmptyFloor & other, const std::shared_ptr<Map> map
 	other.collide(*this, map);
 }
 
-void Knight::collide(Character & other, const std::shared_ptr<Map> map)
+void Knight::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
-	other.collide(*this, map);
+	//take_damage from ActiveCharacter;
 }
 
 void EmptyFloor::collide(Character & other, const std::shared_ptr<Map> map)
@@ -60,10 +55,6 @@ void EmptyFloor::collide(ActiveCharacter & other, const std::shared_ptr<Map> map
 {
 	EventManager::get_manager().add_move(other.get_ptr(), get_col(), get_row());
 }
-
-//void EmptyFloor::collide(Knight & other, const std::shared_ptr<Map> map)
-//{
-//}
 
 void Wall::collide(Character & other, const std::shared_ptr<Map> map)
 {

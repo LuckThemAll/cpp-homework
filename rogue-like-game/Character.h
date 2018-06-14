@@ -21,7 +21,7 @@ public:
 	virtual void make_move(const std::shared_ptr<Map> map) {};
 	virtual void collide(Character &other, const std::shared_ptr<Map> map);
 	virtual void collide(ActiveCharacter &other, const std::shared_ptr<Map> map);
-	virtual void collide(Knight &other, const std::shared_ptr<Map> map);
+	//virtual void collide(Knight &other, const std::shared_ptr<Map> map);
 	virtual void collide(EmptyFloor &other, const std::shared_ptr<Map> map);
 
 	std::shared_ptr<Character> get_ptr() { return shared_from_this(); }
@@ -57,7 +57,9 @@ class Knight : public ActiveCharacter
 {
 public:
 	Knight(int col, int row) : ActiveCharacter(col, row, 'K') {};
-	void collide(Character &other, const std::shared_ptr<Map> map) override;
+	//void collide(Character &other, const std::shared_ptr<Map> map) override;
+	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
+
 private:
 	
 };
