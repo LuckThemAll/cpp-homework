@@ -12,7 +12,7 @@ class EmptyFloor;
 class Character : public std::enable_shared_from_this<Character>
 {
 public:
-	Character(int col, int row, char symbol) : _col(col), _row(row), _symbol(symbol) {};
+	Character(int col, int row, char symbol = 'C') : _col(col), _row(row), _symbol(symbol) {};
 	char get_symbol() const { return _symbol; }
 	int get_col() { return _col; }
 	int get_row() { return _row; }
@@ -35,7 +35,7 @@ private:
 class EmptyFloor : public Character 
 {
 public:
-	EmptyFloor(int col, int row, char symbol = 'q') : Character(col, row, '.') {}
+	EmptyFloor(int col, int row, char symbol = '.') : Character(col, row, symbol) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	virtual void collide(ActiveCharacter &other, const std::shared_ptr<Map> map);
 	//virtual void collide(Knight &other, const std::shared_ptr<Map> map);
@@ -56,7 +56,7 @@ public:
 class Knight : public ActiveCharacter
 {
 public:
-	Knight(int col, int row) : ActiveCharacter(col, row, 'K') {};
+	Knight(int col, int row, char symbol = 'K') : ActiveCharacter(col, row, symbol) {};
 	//void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 
@@ -67,13 +67,13 @@ private:
 class Monster : public ActiveCharacter
 {
 public:
-	Monster(int col, int row) : ActiveCharacter(col, row, 'M') {};
+	Monster(int col, int row, char symbol = 'M') : ActiveCharacter(col, row, symbol) {};
 	void make_move(const std::shared_ptr<Map> map) override;
 };
 
 class Wall : public Character
 {
 public:
-	Wall(int col, int row) : Character(col, row, '#') {}
+	Wall(int col, int row, char symbol = '#') : Character(col, row, symbol) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 };
