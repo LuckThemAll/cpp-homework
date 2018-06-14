@@ -10,7 +10,8 @@ class StaticCharacter;
 class ActiveCharacter;
 class Character;
 
-class MapCell {
+class MapCell 
+{
 public:
 	MapCell(std::shared_ptr<Character> floor, std::shared_ptr<Character> character)
 		: _floor(floor), _character(character) {}
@@ -24,7 +25,8 @@ private:
 	std::shared_ptr<Character> _character;
 };
 
-class Map {
+class Map 
+{
 public:
 	Map() {}
 	Map(std::vector<std::vector<std::shared_ptr<MapCell>>> map) : _map(map) {}

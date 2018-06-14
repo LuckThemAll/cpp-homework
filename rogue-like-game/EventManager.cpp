@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EventManager.h"
 
-EventManager & EventManager::instance()
+EventManager & EventManager::get_manager()
 {
 	static EventManager e;
 	return e;

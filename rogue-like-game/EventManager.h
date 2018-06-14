@@ -11,9 +11,10 @@ class DamageEvent;
 class Character;
 class Map;
 
-class EventManager {
+class EventManager 
+{
 public:
-	static EventManager& instance();
+	static EventManager& get_manager();
 	EventManager();
 	void trigger_all(std::shared_ptr<Map> map);
 
@@ -31,7 +32,8 @@ public:
 	virtual void trigger(std::shared_ptr<Map> map) = 0;
 };
 
-class MoveEvent : public Event {
+class MoveEvent : public Event 
+{
 public:
 	MoveEvent(std::shared_ptr<Character> character, int to_col, int to_row) 
 		: _character(character), _to_row(to_row), _to_col(to_col)  {}
@@ -42,7 +44,8 @@ private:
 	int _to_row, _to_col;
 };
 
-class DamageEvent : public Event {
+class DamageEvent : public Event 
+{
 public:
 	DamageEvent(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage) 
 		: _from(from), _to(to), _damage(damage) {}

@@ -35,7 +35,7 @@ void UI::start_game()
 			continue;
 		}
 		}
-		game.make_turn(EventManager::instance());
+		game.make_turn(EventManager::get_manager());
 		game.draw();
 	}
 }

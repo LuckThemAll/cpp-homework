@@ -26,7 +26,7 @@ void Game::make_map()
 				continue;
 			}
 			if (s == '.') {
-				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j, '.'), std::make_shared<Character>(i, j, '.')));
+				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j, '.'), std::make_shared<EmptyFloor>(i, j, '0')));
 			}
 		}
 	}
