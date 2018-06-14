@@ -62,13 +62,17 @@ void Wall::collide(Character & other, const std::shared_ptr<Map> map)
 	int debug = 0;
 }
 
+int sgn(int val) {
+	return (0 < val) - (val < 0);
+}
+
 void Monster::make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map)
 {
-	if (abs(get_col() - knight_col) < 5 && abs(get_row() - knight_row) < 5) {
-		//дописать хождение монтсра к игроку, хп, дамаг
-		if (knight_col - get_col) {
-			move_to(-1, 0, map);
-		}
+	int col_diff = abs(get_col() - knight_col);
+	int row_diff = abs(get_row() - knight_row);
+	if (col_diff < get_visibility() && row_diff < get_visibility()) {
+		col_diff > row_diff ? move_to(sgn(knight_col - get_col()), 0, map) :
+			col_diff < row_diff ? move_to(0, sgn(knight_row - get_row()), map) :
+			rand() > RAND_MAX / 2 ? move_to(sgn(knight_col - get_col()), 0, map) : move_to(0, sgn(knight_row - get_row()), map);
 	}
-	move_to(-1, -1, map);
 }

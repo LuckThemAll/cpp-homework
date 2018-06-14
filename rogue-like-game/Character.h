@@ -67,8 +67,12 @@ private:
 class Monster : public ActiveCharacter
 {
 public:
-	Monster(int col, int row, char symbol = 'M') : ActiveCharacter(col, row, symbol) {};
+	Monster(int col, int row, char symbol = 'M', int visibility = 5) : 
+		ActiveCharacter(col, row, symbol), _visibility(visibility) {};
 	void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) override;
+	int get_visibility() { return _visibility; }
+private:
+	int _visibility;
 };
 
 class Wall : public Character

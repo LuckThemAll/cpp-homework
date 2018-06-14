@@ -65,7 +65,7 @@ void Game::make_turn(EventManager event_manager)
 void Game::move_active_characters()
 {
 	for (auto character : _active_characters) {
-		character->make_move(map());
+		character->make_move_to_knight(knight()->get_col(), knight()->get_row(), map());
 	}
 }
 
