@@ -15,7 +15,9 @@ public:
 	void make_map();
 	void draw();
 	void make_turn(EventManager event_manager);
+	void move_active_characters();
 private:
+	std::vector<std::shared_ptr<Character>> _active_characters;
 	std::shared_ptr<Knight> _knight;
 	std::shared_ptr<Map> _map;
 };

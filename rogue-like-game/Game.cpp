@@ -27,10 +27,16 @@ void Game::make_map()
 			}
 			if (s == '.') {
 				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j, '.'), std::make_shared<EmptyFloor>(i, j, '0')));
+				continue;
+			}
+			if (s == 'M') {
+				_map->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j, '.'), std::make_shared<Monster>(i, j)));
+				auto a = _map->get_cell(i, j)->get_character();
+				_active_characters.push_back( a);
+				continue;
 			}
 		}
 	}
-	int sada = 0; //debug
 }
 
 void Game::draw() {
@@ -54,6 +60,13 @@ void Game::draw() {
 void Game::make_turn(EventManager event_manager)
 {
 	event_manager.trigger_all(_map);
+}
+
+void Game::move_active_characters()
+{
+	for (auto character : _active_characters) {
+		character->make_move(map());
+	}
 }
 
 

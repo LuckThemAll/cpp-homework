@@ -13,8 +13,9 @@ bool Map::is_inrange(int col, int row)
 
 void Map::move_character(int from_col, int from_row, int to_col, int to_row, std::shared_ptr<Character> replace_actor)
 {
-	replace_actor = std::make_shared<Character>(from_col, from_row, '.');
-
+	if (!get_cell(to_col, to_row)->get_character()->may_step())
+		return;
+	replace_actor = std::make_shared<EmptyFloor>(from_col, from_row, '.');
 	get_cell(to_col, to_row)->set_character(get_cell(from_col, from_row)->get_character());
 	get_cell(to_col, to_row)->get_character()->set_pos(to_col, to_row);
 

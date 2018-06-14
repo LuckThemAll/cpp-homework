@@ -11,24 +11,27 @@ void UI::start_game()
 	Game game(std::make_shared<Map>(), std::make_shared<Knight>(0, 0));
 	game.make_map();
 	game.draw();
-	//EventManager event_manager;
 	while (true) {
 		int key = getch();
 		switch (key) {
-		case 119: {
+		case 'w': {
+			game.move_active_characters();
 			game.knight()->move_to(-1, 0, game.map());
 			break;
 		}
-		case 115: {
+		case 's': {
+			game.move_active_characters();
 			game.knight()->move_to(1, 0, game.map());
 			break;
 		}
-		case 100: {
+		case 'd': {
+			game.move_active_characters();
 			game.knight()->move_to(0, 1, game.map());
 			break;
 		}
-		case 97: {
+		case 'a': {
 			game.knight()->move_to(0, -1, game.map());
+			game.move_active_characters();
 			break;
 		}
 		default: {
