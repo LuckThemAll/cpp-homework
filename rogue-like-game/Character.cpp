@@ -62,7 +62,13 @@ void Wall::collide(Character & other, const std::shared_ptr<Map> map)
 	int debug = 0;
 }
 
-void Monster::make_move(const std::shared_ptr<Map> map)
+void Monster::make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map)
 {
+	if (abs(get_col() - knight_col) < 5 && abs(get_row() - knight_row) < 5) {
+		//дописать хождение монтсра к игроку, хп, дамаг
+		if (knight_col - get_col) {
+			move_to(-1, 0, map);
+		}
+	}
 	move_to(-1, -1, map);
 }

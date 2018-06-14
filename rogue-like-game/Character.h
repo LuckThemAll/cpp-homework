@@ -18,7 +18,7 @@ public:
 	int get_row() { return _row; }
 	void set_pos(int col, int row) { _col = col; _row = row; }
 	virtual bool may_step() { return true; }
-	virtual void make_move(const std::shared_ptr<Map> map) {};
+	virtual void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) {};
 	virtual void collide(Character &other, const std::shared_ptr<Map> map);
 	virtual void collide(ActiveCharacter &other, const std::shared_ptr<Map> map);
 	//virtual void collide(Knight &other, const std::shared_ptr<Map> map);
@@ -50,7 +50,7 @@ public:
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(EmptyFloor &other, const std::shared_ptr<Map> map) override;
-	void make_move(const std::shared_ptr<Map> map) override {};
+	void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) override {};
 };
 
 class Knight : public ActiveCharacter
@@ -68,7 +68,7 @@ class Monster : public ActiveCharacter
 {
 public:
 	Monster(int col, int row, char symbol = 'M') : ActiveCharacter(col, row, symbol) {};
-	void make_move(const std::shared_ptr<Map> map) override;
+	void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) override;
 };
 
 class Wall : public Character
