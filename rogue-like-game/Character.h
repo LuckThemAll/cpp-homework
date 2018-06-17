@@ -12,11 +12,16 @@ class EmptyFloor;
 class Character : public std::enable_shared_from_this<Character>
 {
 public:
-	Character(int col, int row, char symbol = 'C') : _col(col), _row(row), _symbol(symbol) {};
+	Character(int col, int row, char symbol = 'C', double damage = 0, double hp = INT_MAX) :
+		_col(col), _row(row), _symbol(symbol), _damage(damage), _hp(hp) {};
 	char get_symbol() const { return _symbol; }
 	int get_col() { return _col; }
 	int get_row() { return _row; }
+	double get_damage() { return _damage; }
+	double get_hp() { return _hp; }
+	bool is_dead() { return _hp <= 0; }
 	void set_pos(int col, int row) { _col = col; _row = row; }
+	void take_damage(double damage) { _hp -= damage; }
 	virtual bool may_step() { return true; }
 	virtual void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) {};
 	virtual void collide(Character &other, const std::shared_ptr<Map> map);
@@ -29,13 +34,14 @@ public:
 private:
 	char _symbol;
 	int _col, _row;
-
+	double _damage, _hp;
 };
 
 class EmptyFloor : public Character 
 {
 public:
-	EmptyFloor(int col, int row, char symbol = '.') : Character(col, row, symbol) {}
+	EmptyFloor(int col, int row, char symbol = '.', double damage = 0, double hp = INT_MAX) :
+		Character(col, row, symbol, damage, hp) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	virtual void collide(ActiveCharacter &other, const std::shared_ptr<Map> map);
 	//virtual void collide(Knight &other, const std::shared_ptr<Map> map);
@@ -44,7 +50,8 @@ public:
 class ActiveCharacter : public Character 
 {
 public:
-	ActiveCharacter(int col, int row, char symobol = 'A') : Character(col, row, symobol) {}
+	ActiveCharacter(int col, int row, char symobol = 'A', double damage = 10, double hp = 100) : 
+		Character(col, row, symobol, damage, hp) {}
 	bool may_step() override { return false; }
 	void move_to(int to_col, int to_row, const std::shared_ptr<Map> map);
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
@@ -56,7 +63,8 @@ public:
 class Knight : public ActiveCharacter
 {
 public:
-	Knight(int col, int row, char symbol = 'K') : ActiveCharacter(col, row, symbol) {};
+	Knight(int col, int row, char symbol = 'K', double damage = 10, double hp = 1000) : 
+		ActiveCharacter(col, row, symbol, damage, hp) {};
 	//void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 
@@ -67,8 +75,9 @@ private:
 class Monster : public ActiveCharacter
 {
 public:
-	Monster(int col, int row, char symbol = 'M', int visibility = 5) : 
-		ActiveCharacter(col, row, symbol), _visibility(visibility) {};
+	Monster(int col, int row, char symbol = 'M', int visibility = 5, double damage = 7, double hp = 100) :
+		ActiveCharacter(col, row, symbol, damage, hp), _visibility(visibility) {};
+	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 	void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) override;
 	int get_visibility() { return _visibility; }
 private:

@@ -18,7 +18,7 @@ public:
 	EventManager();
 	void trigger_all(std::shared_ptr<Map> map);
 
-	//void add_damage(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage);
+	void add_damage(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage);
 	void add_move(std::shared_ptr<Character> character, int to_row, int to_col);
 private:
 	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _move_events;
@@ -50,7 +50,7 @@ public:
 	DamageEvent(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage) 
 		: _from(from), _to(to), _damage(damage) {}
 
-	//void trigger(std::vector<std::vector<std::shared_ptr<MapCell>>> &map) override;
+	void trigger(std::shared_ptr<Map> map) override;
 private:
 	std::shared_ptr<Character> _from;
 	std::shared_ptr<Character> _to;

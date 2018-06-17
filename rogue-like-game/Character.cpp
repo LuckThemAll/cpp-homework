@@ -43,6 +43,7 @@ void ActiveCharacter::collide(EmptyFloor & other, const std::shared_ptr<Map> map
 
 void Knight::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
+	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
 	//take_damage from ActiveCharacter;
 }
 

@@ -21,7 +21,7 @@ void Game::make_map()
 				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), knight()));
 				continue;
 			}
-			if (i == 2 && j == 2) {
+			if (s == '#') {
 				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Wall>(i, j)));
 				continue;
 			}
@@ -53,13 +53,23 @@ void Game::draw() {
 		}
 		printw("\n");
 	}
+	addstr((" HP: " + std::to_string(_knight->get_hp()) + "\n").c_str());
 	refresh();
 	
 }
 
 void Game::make_turn(EventManager event_manager)
 {
-	event_manager.trigger_all(_map);
+	event_manager.trigger_all(_map_ptr);
+	for (auto i = _active_characters.begin(); i != _active_characters.end();) {
+		if (i->get()->is_dead()) {
+			_map_ptr->move_character(i->get()->get_col(), i->get()->get_row(), i->get()->get_col(), i->get()->get_row());
+			i = _active_characters.erase(i);
+		}
+		else
+			i++;
+	}//дописать анигиляцию мертвых характеров
+
 }
 
 void Game::move_active_characters()
