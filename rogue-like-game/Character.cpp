@@ -12,6 +12,12 @@ void Character::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 	other.collide(*this, map);
 }
 
+void Character::collide(Projectile & other, const std::shared_ptr<Map> map)
+{
+	//sdsdfsfsdfsdf
+	other.collide(*this, map);
+}
+
 void Character::collide(EmptyFloor & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
@@ -41,6 +47,12 @@ void ActiveCharacter::collide(EmptyFloor & other, const std::shared_ptr<Map> map
 	other.collide(*this, map);
 }
 
+void ActiveCharacter::collide(Projectile & other, const std::shared_ptr<Map> map)
+{
+	other.collide(*this, map);
+	//EventManager::get_manager().add_damage(other.get_ptr(), get_ptr(), other.get_damage());
+}
+
 void Knight::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
 	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
@@ -63,6 +75,11 @@ void Wall::collide(Character & other, const std::shared_ptr<Map> map)
 	int debug = 0;
 }
 
+void Wall::collide(Projectile & other, const std::shared_ptr<Map> map)
+{
+	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), 1);
+}
+
 int sgn(int val) {
 	return (0 < val) - (val < 0);
 }
@@ -83,4 +100,14 @@ void Monster::make_move_to_knight(int knight_col, int knight_row, const std::sha
 		rand() > RAND_MAX / 2 ? rand() > RAND_MAX / 2 ? move_to(-1, 0, map) : move_to(1, 0, map) :
 		rand() > RAND_MAX / 2 ? move_to(0, -1, map) : move_to(0, 1, map);
 	
+}
+
+void Projectile::collide(Character & other, const std::shared_ptr<Map> map)
+{
+	other.collide(*this, map);
+}
+
+void Projectile::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
+{
+	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
 }

@@ -16,8 +16,10 @@ public:
 	void draw();
 	void make_turn(EventManager event_manager);
 	void move_active_characters();
+	void add_projectile(int col, int row);
 private:
 	std::vector<std::shared_ptr<Character>> _active_characters;
+	std::vector<std::shared_ptr<Character>> _projectiles;
 	std::shared_ptr<Knight> _knight;
 	std::shared_ptr<Map> _map_ptr;
 };

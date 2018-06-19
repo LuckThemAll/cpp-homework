@@ -8,6 +8,7 @@ class Knight;
 class Wall;
 class ActiveCharacter;
 class EmptyFloor;
+class Projectile;
 
 class Character : public std::enable_shared_from_this<Character>
 {
@@ -22,11 +23,15 @@ public:
 	bool is_dead() { return _hp <= 0; }
 	void set_pos(int col, int row) { _col = col; _row = row; }
 	void take_damage(double damage) { _hp -= damage; }
+	virtual int get_dir_col() {}
+	virtual int get_dir_row() {}
+	virtual void move_to(int to_col, int to_row, const std::shared_ptr<Map> map) {}
 	virtual bool may_step() { return true; }
 	virtual void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) {};
 	virtual void collide(Character &other, const std::shared_ptr<Map> map);
 	virtual void collide(ActiveCharacter &other, const std::shared_ptr<Map> map);
 	//virtual void collide(Knight &other, const std::shared_ptr<Map> map);
+	virtual void collide(Projectile &other, const std::shared_ptr<Map> map);
 	virtual void collide(EmptyFloor &other, const std::shared_ptr<Map> map);
 
 	std::shared_ptr<Character> get_ptr() { return shared_from_this(); }
@@ -57,6 +62,7 @@ public:
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(EmptyFloor &other, const std::shared_ptr<Map> map) override;
+	void collide(Projectile &other, const std::shared_ptr<Map> map) override;
 	void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) override {};
 };
 
@@ -89,4 +95,18 @@ class Wall : public Character
 public:
 	Wall(int col, int row, char symbol = '#') : Character(col, row, symbol) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
+	void collide(Projectile &other, const std::shared_ptr<Map> map) override;
+};
+
+class Projectile : public ActiveCharacter
+{
+public:
+	Projectile(int col, int row, char symbol = '0', double damage = 50, double hp = 1) 
+		: ActiveCharacter(col, row, symbol, damage, hp) {}
+	void collide(Character &other, const std::shared_ptr<Map> map) override;
+	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
+	int get_dir_col() override { return dir_to_col; }
+	int get_dir_row() override { return dir_to_row; }
+private:
+	int dir_to_col, dir_to_row;
 };
