@@ -23,8 +23,8 @@ public:
 	bool is_dead() { return _hp <= 0; }
 	void set_pos(int col, int row) { _col = col; _row = row; }
 	void take_damage(double damage) { _hp -= damage; }
-	virtual int get_dir_col() {}
-	virtual int get_dir_row() {}
+	//virtual int get_dir_col() {}
+	//virtual int get_dir_row() {}  ÊÎÍÑÒÀÍÒÍÛÅ ÌÅÒÎÄÛ ÑÄÅËÀÒÜ, ÊËÀÑÑ ÏÐÈÍÖÅÑÛ, ÌÅÒÎÄ ÎÁÐÀÁÎÒÊÈ ÕÎÄÀ ÃÅÐÎß
 	virtual void move_to(int to_col, int to_row, const std::shared_ptr<Map> map) {}
 	virtual bool may_step() { return true; }
 	virtual void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) {};
@@ -105,8 +105,8 @@ public:
 		: ActiveCharacter(col, row, symbol, damage, hp) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
-	int get_dir_col() override { return dir_to_col; }
-	int get_dir_row() override { return dir_to_row; }
+	//int get_dir_col() override { return dir_to_col; }
+	//int get_dir_row() override { return dir_to_row; }
 private:
 	int dir_to_col, dir_to_row;
 };

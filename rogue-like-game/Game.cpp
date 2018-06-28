@@ -74,13 +74,11 @@ void Game::make_turn(EventManager event_manager)
 
 void Game::move_active_characters()
 {
-	for (auto character : _projectiles) {
-		character->move_to(character->get_dir_col(), character->get_dir_row(), map());
-	}
-
+	//for (auto character : _projectiles) {
+//		character->move_to(character->get_dir_col(), character->get_dir_row(), map());
+	//}
+	//make_disitioon 
 	for (auto character : _active_characters) {
 		character->make_move_to_knight(knight()->get_col(), knight()->get_row(), map());
 	}
 }
-
-

@@ -34,6 +34,9 @@ void UI::start_game()
 			game.move_active_characters();
 			break;
 		}
+/*		case 'k': {
+			game.
+		}*/
 		default: {
 			continue;
 		}
