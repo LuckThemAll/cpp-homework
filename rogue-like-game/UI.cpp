@@ -20,18 +20,18 @@ void UI::start_game()
 			break;
 		}
 		case 's': {
-			game.move_active_characters();
+			//game.move_active_characters();
 			game.knight()->move_to(1, 0, game.map());
 			break;
 		}
 		case 'd': {
-			game.move_active_characters();
+			//game.move_active_characters();
 			game.knight()->move_to(0, 1, game.map());
 			break;
 		}
 		case 'a': {
-			game.knight()->move_to(0, -1, game.map());
 			game.move_active_characters();
+			game.knight()->move_to(0, -1, game.map());
 			break;
 		}
 /*		case 'k': {

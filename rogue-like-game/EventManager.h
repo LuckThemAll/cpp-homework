@@ -23,7 +23,7 @@ public:
 private:
 	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _move_events;
 	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _damage_events;
-
+	
 	std::deque<std::shared_ptr<std::stack<std::shared_ptr<Event>>>> _events_pool;
 };
 

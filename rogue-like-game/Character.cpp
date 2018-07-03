@@ -23,13 +23,18 @@ void Character::collide(EmptyFloor & other, const std::shared_ptr<Map> map)
 	other.collide(*this, map);
 }
 
+void Character::collide(Princess & other, const std::shared_ptr<Map> map)
+{
+	other.collide(*this, map);
+}
+
 void ActiveCharacter::move_to(int to_col, int to_row, const std::shared_ptr<Map> map)
 {
 	if (map->is_inrange(get_col() + to_col, get_row() + to_row)){
 		auto cell = map->get_cell(get_col() + to_col, get_row() + to_row);
 		auto character = cell->get_character();
 		character->collide(*get_ptr(), map);
-	}
+	} 
 }
 
 void ActiveCharacter::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
@@ -47,6 +52,11 @@ void ActiveCharacter::collide(EmptyFloor & other, const std::shared_ptr<Map> map
 	other.collide(*this, map);
 }
 
+void ActiveCharacter::collide(Princess & other, const std::shared_ptr<Map> map)
+{
+	other.collide(*this, map);
+}
+
 void ActiveCharacter::collide(Projectile & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
@@ -57,6 +67,11 @@ void Knight::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
 	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
 	//take_damage from ActiveCharacter;
+}
+
+void Knight::collide(Princess & other, const std::shared_ptr<Map> map)
+{
+	other.collide(*this, map);
 }
 
 void EmptyFloor::collide(Character & other, const std::shared_ptr<Map> map)
@@ -89,6 +104,11 @@ void Monster::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
 }
 
+void Monster::collide(Princess & other, const std::shared_ptr<Map> map)
+{
+	other.collide(*this, map);
+}
+
 void Monster::make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map)
 {
 	int col_diff = abs(get_col() - knight_col);
@@ -110,4 +130,19 @@ void Projectile::collide(Character & other, const std::shared_ptr<Map> map)
 void Projectile::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
 	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
+}
+
+void Princess::collide(Character & other, const std::shared_ptr<Map> map)
+{
+	other.collide(*this, map);
+}
+
+void Princess::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
+{
+	//nothing
+}
+
+void Princess::collide(Knight & other, const std::shared_ptr<Map> map)
+{
+	other.set_win();
 }

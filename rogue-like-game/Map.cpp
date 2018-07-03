@@ -13,7 +13,7 @@ bool Map::is_inrange(int col, int row)
 
 void Map::move_character(int from_col, int from_row, int to_col, int to_row, std::shared_ptr<Character> replace_actor)
 {
-	if (!get_cell(to_col, to_row)->get_character()->may_step() && !get_cell(to_col, to_row)->get_character()->is_dead())
+	if (!get_cell(to_col, to_row)->get_character()->is_transparent() && !get_cell(to_col, to_row)->get_character()->is_dead())
 		return;
 	if (!replace_actor) {
 		replace_actor = std::make_shared<EmptyFloor>(from_col, from_row, '.');

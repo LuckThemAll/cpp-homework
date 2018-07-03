@@ -35,6 +35,10 @@ void Game::make_map()
 				_active_characters.push_back( a);
 				continue;
 			}
+			if (s == 'O') {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Princess>(i, j)));
+				continue;
+			}
 		}
 	}
 }
@@ -44,18 +48,22 @@ void Game::draw() {
 	noecho();
 	raw();
 	clear();
-	for (int i = 0; i < _map_ptr->get_cols_num(); i++) {
-		for (int j = 0; j < _map_ptr->get_rows_num(); j++) {
-			char k[2];
-			k[0] = _map_ptr->get_cell(i, j)->get_character()->get_symbol();
-			k[1] = '\0';
-			printw(k);
-		}
-		printw("\n");
+	if (_knight->is_winner()) {
+		printw("woowowowowowoow, u are WIIIIINENNENENNEER");
 	}
-	addstr((" HP: " + std::to_string(_knight->get_hp()) + "\n").c_str());
+	else{
+		for (int i = 0; i < _map_ptr->get_cols_num(); i++) {
+			for (int j = 0; j < _map_ptr->get_rows_num(); j++) {
+				char k[2];
+				k[0] = _map_ptr->get_cell(i, j)->get_character()->get_symbol();
+				k[1] = '\0';
+				printw(k);
+			}
+			printw("\n");
+		}
+		addstr((" HP: " + std::to_string(_knight->get_hp()) + "\n").c_str());
+	}
 	refresh();
-	
 }
 
 void Game::make_turn(EventManager event_manager)
