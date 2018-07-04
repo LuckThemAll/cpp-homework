@@ -17,6 +17,7 @@ void Map::spawn_character(int to_col, int to_row, std::shared_ptr<Character> spa
 		return;
 	get_cell(to_col, to_row)->set_character(spawn_character);
 	get_cell(to_col, to_row)->get_character()->set_pos(to_col, to_row);
+	spawn_character->is_made_turn(true);
 }
 
 void Map::move_character(int from_col, int from_row, int to_col, int to_row, std::shared_ptr<Character> replace_character)

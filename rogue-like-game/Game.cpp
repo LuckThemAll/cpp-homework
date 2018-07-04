@@ -69,8 +69,15 @@ void Game::draw() {
 void Game::make_turn(EventManager event_manager)
 {
 	event_manager.trigger_all(_map_ptr);
+	
+	for (auto character : _projectiles) {
+		if (!character->is_made_turn()) {
+			character->move_to(character->get_dir_col(), character->get_dir_row(), map());
+		}
+	}
 
 	for (auto i = _projectiles.begin(); i != _projectiles.end();) {
+		i->get()->is_made_turn(false);
 		if (i->get()->is_dead()) {
 			_map_ptr->move_character(i->get()->get_col(), i->get()->get_row(), i->get()->get_col(), i->get()->get_row());
 			i = _projectiles.erase(i);
@@ -92,9 +99,6 @@ void Game::make_turn(EventManager event_manager)
 
 void Game::move_active_characters()
 {
-	//for (auto character : _projectiles) {
-		//character->move_to(character->get_dir_col(), character->get_dir_row(), map());
-	//}
 	//make_disitioon 
 	for (auto character : _active_characters) {
 		character->make_move_to_knight(knight()->get_col(), knight()->get_row(), map());

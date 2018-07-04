@@ -126,7 +126,8 @@ void Projectile::collide(Character & other, const std::shared_ptr<Map> map)
 
 void Projectile::collide(EmptyFloor & other, const std::shared_ptr<Map> map)
 {
-	other.collide(*this, map);
+	//other.collide(*this, map);
+	EventManager::get_manager().add_move(get_ptr(),get_col() + get_dir_col(), get_row() + get_dir_row());
 }
 
 void Projectile::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)

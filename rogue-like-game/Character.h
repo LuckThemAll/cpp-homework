@@ -15,8 +15,8 @@ class Monster;
 class Character : public std::enable_shared_from_this<Character>
 {
 public:
-	Character(int col, int row, char symbol = 'C', double damage = 0, double hp = INT_MAX) :
-		_col(col), _row(row), _symbol(symbol), _damage(damage), _hp(hp) {};
+	Character(int col, int row, char symbol = 'C', double damage = 0, double hp = INT_MAX, bool is_made_turn = false) :
+		_col(col), _row(row), _symbol(symbol), _damage(damage), _hp(hp), _is_made_turn(is_made_turn) {};
 	char get_symbol() const { return _symbol; }
 	int get_col() const { return _col; }
 	int get_row() const { return _row; }
@@ -26,6 +26,8 @@ public:
 	void set_pos(int col, int row) { _col = col; _row = row; }
 	void take_damage(double damage) { _hp -= damage; }
 	void kill() { _hp = 0; };
+	void is_made_turn(bool result) { _is_made_turn = result; };
+	bool is_made_turn() const { return _is_made_turn; }
 	virtual int get_dir_col() const { return 0; }
 	virtual int get_dir_row() const { return 0; }
 	virtual void move_to(int to_col, int to_row, const std::shared_ptr<Map> map) {}
@@ -38,7 +40,8 @@ public:
 	virtual void collide(Princess &other, const std::shared_ptr<Map> map);
 
 	std::shared_ptr<Character> get_ptr() { return shared_from_this(); }
-
+protected:
+	bool _is_made_turn;
 private:
 	char _symbol;
 	int _col, _row;
@@ -58,8 +61,8 @@ public:
 class ActiveCharacter : public Character 
 {
 public:
-	ActiveCharacter(int col, int row, char symobol = 'A', double damage = 10, double hp = 100) : 
-		Character(col, row, symobol, damage, hp) {}
+	ActiveCharacter(int col, int row, char symobol = 'A', double damage = 10, double hp = 100, bool is_made_turn = false) :
+		Character(col, row, symobol, damage, hp, is_made_turn) {}
 	bool is_transparent() override { return false; }
 	void move_to(int to_col, int to_row, const std::shared_ptr<Map> map);
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
@@ -119,8 +122,9 @@ class Projectile : public ActiveCharacter
 {
 public:
 	Projectile(int col, int row, int dir_to_col, int dir_to_row,
-		char symbol = '*', double damage = 50, double hp = 1)
-		: ActiveCharacter(col, row, symbol, damage, hp), _dir_to_col(dir_to_col), _dir_to_row(dir_to_row) {}
+		char symbol = '*', double damage = 50, double hp = 1, bool is_made_turn = false)
+		: ActiveCharacter(col, row, symbol, damage, hp, is_made_turn), 
+		_dir_to_col(dir_to_col), _dir_to_row(dir_to_row) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(EmptyFloor &other, const std::shared_ptr<Map> map) override;
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
