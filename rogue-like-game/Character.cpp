@@ -59,7 +59,6 @@ void ActiveCharacter::collide(Princess & other, const std::shared_ptr<Map> map)
 void ActiveCharacter::collide(Projectile & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
-	//EventManager::get_manager().add_damage(other.get_ptr(), get_ptr(), other.get_damage());
 }
 
 void Knight::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
@@ -133,6 +132,7 @@ void Projectile::collide(EmptyFloor & other, const std::shared_ptr<Map> map)
 void Projectile::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
 	EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
+	EventManager::get_manager().add_move(other.get_ptr(), get_col(), get_row());
 	kill();
 }
 

@@ -37,7 +37,7 @@ public:
 	int get_rows_num() { return (_map[0].size()); }
 	std::vector<std::shared_ptr<MapCell>> &get_col(int col) { return _map[col]; }
 	bool is_inrange(int col, int row);
-	void replace_character(int to_col, int to_row, std::shared_ptr<Character> replace_character);
+	void spawn_character(int to_col, int to_row, std::shared_ptr<Character> spawn_character);
 	void move_character(int from_col, int from_row, int to_col, int to_row, std::shared_ptr<Character> replace_actor = nullptr);
 private:
 	std::vector<std::vector<std::shared_ptr<MapCell>>> _map;

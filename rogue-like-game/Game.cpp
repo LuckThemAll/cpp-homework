@@ -76,6 +76,7 @@ void Game::make_turn(EventManager event_manager)
 			i = _projectiles.erase(i);
 		}
 		else
+			//i->get()->move_to(i->get()->get_dir_col(), i->get()->get_dir_row(), _map_ptr);
 			i++;
 	}
 
@@ -87,7 +88,6 @@ void Game::make_turn(EventManager event_manager)
 		else
 			i++;
 	}
-
 }
 
 void Game::move_active_characters()

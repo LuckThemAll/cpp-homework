@@ -11,11 +11,11 @@ bool Map::is_inrange(int col, int row)
 	return get_cols_num() > col && get_rows_num() > row && col > -1 && row > -1;
 }
 
-void Map::replace_character(int to_col, int to_row, std::shared_ptr<Character> replace_character)
+void Map::spawn_character(int to_col, int to_row, std::shared_ptr<Character> spawn_character)
 {
 	if (!get_cell(to_col, to_row)->get_character()->is_transparent() && !get_cell(to_col, to_row)->get_character()->is_dead())
 		return;
-	get_cell(to_col, to_row)->set_character(replace_character);
+	get_cell(to_col, to_row)->set_character(spawn_character);
 	get_cell(to_col, to_row)->get_character()->set_pos(to_col, to_row);
 }
 

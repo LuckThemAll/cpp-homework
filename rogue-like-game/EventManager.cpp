@@ -68,5 +68,5 @@ void SpawnProjectileEvent::trigger(std::shared_ptr<Map> map)
 	auto character = cell->get_character();
 	character->collide(*_projectile, map);
 
-	map->replace_character(_spawn_to_col, _spawn_to_row, _projectile);
+	map->spawn_character(_spawn_to_col, _spawn_to_row, _projectile);
 }
