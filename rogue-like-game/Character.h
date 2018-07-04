@@ -11,6 +11,7 @@ class EmptyFloor;
 class Projectile;
 class Princess;
 class Monster;
+class Map;
 
 class Character : public std::enable_shared_from_this<Character>
 {
@@ -125,8 +126,7 @@ public:
 		char symbol = '*', double damage = 50, double hp = 1, bool is_made_turn = false)
 		: ActiveCharacter(col, row, symbol, damage, hp, is_made_turn), 
 		_dir_to_col(dir_to_col), _dir_to_row(dir_to_row) {}
-	void collide(Character &other, const std::shared_ptr<Map> map) override;
-	void collide(EmptyFloor &other, const std::shared_ptr<Map> map) override;
+	bool is_transparent() override { return true; }
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 	int get_dir_col() const override { return _dir_to_col; } 
 	int get_dir_row() const override { return _dir_to_row; }

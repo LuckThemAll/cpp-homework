@@ -11,29 +11,53 @@ EventManager::EventManager()
 {
 	_move_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
 	_damage_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
-	_projectiles_move_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
 	_projectiles_spawn_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
 
 	_events_pool.push_back(_move_events);
 	_events_pool.push_back(_damage_events);
-	_events_pool.push_back(_projectiles_move_events);
-	_events_pool.push_back(_projectiles_spawn_events);
 }
 
-void EventManager::trigger_all(std::shared_ptr<Map> map_)
+void EventManager::trigger_all(Game & game, std::shared_ptr<Map> map)
 {
 	for (auto& ev : _events_pool) {
 		while (!ev->empty()) {
-			ev->top()->trigger(map_);
+			ev->top()->trigger(game, map);
 			ev->pop();
 		}
 	}
 	int a = 0;
 }
 
+void EventManager::spawn_projectiles(Game & game, std::shared_ptr<Map> map)
+{
+	while (!_projectiles_spawn_events->empty()) {
+		_projectiles_spawn_events->top()->trigger(game, map);
+		_projectiles_spawn_events->pop();
+		trigger_all(game, map);
+	}
+}
+
+void EventManager::move_projectiles(Game & game, std::shared_ptr<Map> map)
+{
+	if (!game.get_projectiles().empty()) {
+		for (auto i = game._projectiles.begin(); i != game._projectiles.end();) {
+			auto projectile = i->get();
+			projectile->move_to(projectile->get_dir_col(), projectile->get_dir_row(), map);
+			projectile->is_made_turn(true);
+			trigger_all(game, map);
+
+			if (projectile->is_dead())
+				i = game._projectiles.erase(i);
+			else
+				i++;
+		}
+	}
+}
+
 void EventManager::add_projectile(std::shared_ptr<Character> projectile, int spawn_to_col, int spawn_to_row)
 {
 	auto a = new SpawnProjectileEvent(projectile, spawn_to_col, spawn_to_row);
+	projectile->is_made_turn(true);
 	_projectiles_spawn_events->emplace(a);
 }
 
@@ -49,24 +73,28 @@ void EventManager::add_move(std::shared_ptr<Character> character, int to_col, in
 	_move_events->emplace(new MoveEvent(character, to_col, to_row));	
 }
 
-void MoveEvent::trigger(std::shared_ptr<Map> map)
+void MoveEvent::trigger(Game & game, std::shared_ptr<Map> map)
 {
+	_character->is_made_turn(true);
 	if (map->is_inrange(_to_row, _to_col) || map->get_cell(_to_row, _to_col)->get_character()->is_dead()) {
 		map->move_character(_character->get_col(), _character->get_row(),
 			_to_col, _to_row);
 	}
 }
 
-void DamageEvent::trigger(std::shared_ptr<Map> map)
+void DamageEvent::trigger(Game & game, std::shared_ptr<Map> map)
 {
 	_to->take_damage(_damage);
 }
 
-void SpawnProjectileEvent::trigger(std::shared_ptr<Map> map)
+void SpawnProjectileEvent::trigger(Game & game, std::shared_ptr<Map> map)
 {
 	auto cell = map->get_cell(_spawn_to_col, _spawn_to_row);
 	auto character = cell->get_character();
-	character->collide(*_projectile, map);
-
-	map->spawn_character(_spawn_to_col, _spawn_to_row, _projectile);
+	if (character->is_transparent())
+		map->spawn_character(_spawn_to_col, _spawn_to_row, _projectile);
+	else
+		character->collide(*_projectile, map);
+	game._projectiles.push_back(_projectile);
+	int a = 0;
 }

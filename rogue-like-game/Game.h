@@ -5,6 +5,8 @@
 class Game;
 class Knight;
 class EventManager;
+class Map;
+class Character;
 
 class Game 
 {
@@ -17,9 +19,10 @@ public:
 	void make_turn(EventManager event_manager);
 	void move_active_characters();
 	void shoot(int dir_col, int dir_row);
+	std::vector<std::shared_ptr<Character>> get_projectiles() { return _projectiles; }
+	std::vector<std::shared_ptr<Character>> _projectiles;
 private:
 	std::vector<std::shared_ptr<Character>> _active_characters;
-	std::vector<std::shared_ptr<Character>> _projectiles;
 	std::shared_ptr<Knight> _knight;
 	std::shared_ptr<Map> _map_ptr;
 };

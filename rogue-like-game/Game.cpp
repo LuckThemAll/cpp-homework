@@ -68,14 +68,16 @@ void Game::draw() {
 
 void Game::make_turn(EventManager event_manager)
 {
-	event_manager.trigger_all(_map_ptr);
+	event_manager.move_projectiles(*this, map());
 	
-	for (auto character : _projectiles) {
+	/*for (auto character : _projectiles) {
 		if (!character->is_made_turn()) {
 			character->move_to(character->get_dir_col(), character->get_dir_row(), map());
 		}
-	}
-
+	}*/
+	
+	event_manager.trigger_all(*this, map());
+	event_manager.spawn_projectiles(*this, map());
 	for (auto i = _projectiles.begin(); i != _projectiles.end();) {
 		i->get()->is_made_turn(false);
 		if (i->get()->is_dead()) {
@@ -83,7 +85,6 @@ void Game::make_turn(EventManager event_manager)
 			i = _projectiles.erase(i);
 		}
 		else
-			//i->get()->move_to(i->get()->get_dir_col(), i->get()->get_dir_row(), _map_ptr);
 			i++;
 	}
 
@@ -109,7 +110,6 @@ void Game::shoot(int dir_col, int dir_row)
 {
 	if (map()->is_inrange(_knight->get_col() + dir_col, _knight->get_row() + dir_row)){
 		auto a = std::make_shared<Projectile>(_knight->get_col(), _knight->get_row(), dir_col, dir_row);
-		_projectiles.push_back(a);
 		EventManager::get_manager().add_projectile(a, a->get_col() + a->get_dir_col(), a->get_row() + a->get_dir_row());
 	}
 }
