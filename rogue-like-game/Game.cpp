@@ -82,11 +82,18 @@ void Game::make_turn(EventManager event_manager)
 
 void Game::move_active_characters()
 {
-	//for (auto character : _projectiles) {
-//		character->move_to(character->get_dir_col(), character->get_dir_row(), map());
-	//}
+	for (auto character : _projectiles) {
+		character->move_to(character->get_dir_col(), character->get_dir_row(), map());
+	}
 	//make_disitioon 
 	for (auto character : _active_characters) {
 		character->make_move_to_knight(knight()->get_col(), knight()->get_row(), map());
 	}
+}
+
+void Game::add_projectile(int col, int row, int dir_col, int dir_row)
+{
+	auto a = std::make_shared<Projectile>(col, row, dir_col, dir_row);
+	_projectiles.push_back(a);
+	a->move_to(col, row, map());
 }

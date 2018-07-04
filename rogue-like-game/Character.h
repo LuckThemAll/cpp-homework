@@ -25,14 +25,13 @@ public:
 	bool is_dead() { return _hp <= 0; }
 	void set_pos(int col, int row) { _col = col; _row = row; }
 	void take_damage(double damage) { _hp -= damage; }
-	//virtual int get_dir_col() {}
-	//virtual int get_dir_row() {}  ÊËÀÑÑ ÏÐÈÍÖÅÑÛ, ÌÅÒÎÄ ÎÁÐÀÁÎÒÊÈ ÕÎÄÀ ÃÅÐÎß
+	virtual int get_dir_col() const { return 0; }
+	virtual int get_dir_row() const { return 0; }
 	virtual void move_to(int to_col, int to_row, const std::shared_ptr<Map> map) {}
 	virtual bool is_transparent() { return true; }
 	virtual void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) {};
 	virtual void collide(Character &other, const std::shared_ptr<Map> map);
 	virtual void collide(ActiveCharacter &other, const std::shared_ptr<Map> map);
-	//virtual void collide(Knight &other, const std::shared_ptr<Map> map);
 	virtual void collide(Projectile &other, const std::shared_ptr<Map> map);
 	virtual void collide(EmptyFloor &other, const std::shared_ptr<Map> map);
 	virtual void collide(Princess &other, const std::shared_ptr<Map> map);
@@ -118,12 +117,13 @@ public:
 class Projectile : public ActiveCharacter
 {
 public:
-	Projectile(int col, int row, char symbol = '0', double damage = 50, double hp = 1) 
-		: ActiveCharacter(col, row, symbol, damage, hp) {}
+	Projectile(int col, int row, int dir_to_col, int dir_to_row,
+		char symbol = '*', double damage = 50, double hp = 1)
+		: ActiveCharacter(col, row, symbol, damage, hp), _dir_to_col(dir_to_col), _dir_to_row(dir_to_row) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
-	//int get_dir_col() override { return dir_to_col; }
-	//int get_dir_row() override { return dir_to_row; }
+	int get_dir_col() const override { return _dir_to_col; } 
+	int get_dir_row() const override { return _dir_to_row; }
 private:
-	int dir_to_col, dir_to_row;
+	int _dir_to_col, _dir_to_row;
 };
