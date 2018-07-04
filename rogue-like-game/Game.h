@@ -16,7 +16,7 @@ public:
 	void draw();
 	void make_turn(EventManager event_manager);
 	void move_active_characters();
-	void add_projectile(int col, int row, int dir_col, int dir_row);
+	void shoot(int dir_col, int dir_row);
 private:
 	std::vector<std::shared_ptr<Character>> _active_characters;
 	std::vector<std::shared_ptr<Character>> _projectiles;

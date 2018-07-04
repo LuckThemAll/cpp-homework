@@ -25,6 +25,7 @@ public:
 	bool is_dead() { return _hp <= 0; }
 	void set_pos(int col, int row) { _col = col; _row = row; }
 	void take_damage(double damage) { _hp -= damage; }
+	void kill() { _hp = 0; };
 	virtual int get_dir_col() const { return 0; }
 	virtual int get_dir_row() const { return 0; }
 	virtual void move_to(int to_col, int to_row, const std::shared_ptr<Map> map) {}
@@ -51,7 +52,7 @@ public:
 		Character(col, row, symbol, damage, hp) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	virtual void collide(ActiveCharacter &other, const std::shared_ptr<Map> map);
-	//virtual void collide(Knight &other, const std::shared_ptr<Map> map);
+	virtual void collide(Projectile &other, const std::shared_ptr<Map> map) {};
 };
 
 class ActiveCharacter : public Character 
@@ -121,6 +122,7 @@ public:
 		char symbol = '*', double damage = 50, double hp = 1)
 		: ActiveCharacter(col, row, symbol, damage, hp), _dir_to_col(dir_to_col), _dir_to_row(dir_to_row) {}
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
+	void collide(EmptyFloor &other, const std::shared_ptr<Map> map) override;
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 	int get_dir_col() const override { return _dir_to_col; } 
 	int get_dir_row() const override { return _dir_to_row; }

@@ -8,6 +8,7 @@ class EventManager;
 class Event;
 class MoveEvent;
 class DamageEvent;
+class SpawnProjectileEvent;
 class Character;
 class Map;
 
@@ -18,12 +19,16 @@ public:
 	EventManager();
 	void trigger_all(std::shared_ptr<Map> map);
 
+	void add_spawn_character(std::shared_ptr<Character> projectile, int spawn_to_col, int spawn_to_row);
+	void add_projectile(std::shared_ptr<Character> projectile, int spawn_to_col, int spawn_to_row);
 	void add_damage(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage);
 	void add_move(std::shared_ptr<Character> character, int to_row, int to_col);
 private:
 	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _move_events;
 	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _damage_events;
-	
+	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _projectiles_move_events;
+	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _projectiles_spawn_events;
+
 	std::deque<std::shared_ptr<std::stack<std::shared_ptr<Event>>>> _events_pool;
 };
 
@@ -55,4 +60,16 @@ private:
 	std::shared_ptr<Character> _from;
 	std::shared_ptr<Character> _to;
 	double _damage;
+};
+
+class SpawnProjectileEvent : public Event
+{
+public:
+	SpawnProjectileEvent(std::shared_ptr<Character> projectile, int spawn_to_col, int spawn_to_row)
+		: _projectile(projectile), _spawn_to_row(spawn_to_row), _spawn_to_col(spawn_to_col) {}
+
+	void trigger(std::shared_ptr<Map> map) override;
+private:
+	std::shared_ptr<Character> _projectile;
+	int _spawn_to_row, _spawn_to_col;
 };

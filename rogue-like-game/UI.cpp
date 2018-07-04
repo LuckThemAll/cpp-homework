@@ -35,20 +35,24 @@ void UI::start_game()
 			break;
 		}
 		case 'k': {
-			game.add_projectile(game.knight()->get_col() - 1, game.knight()->get_row(), -1, 0);
+			game.shoot(1, 0);
 			game.move_active_characters();
+			break;
 		}
 		case 'i': {
-			game.add_projectile(game.knight()->get_col() + 1, game.knight()->get_row(), 1, 0);
+			game.shoot(-1, 0);
 			game.move_active_characters();
+			break;
 		}
 		case 'j': {
-			game.add_projectile(game.knight()->get_col(), game.knight()->get_row() - 1, 0, -1);
+			game.shoot(0, -1);
 			game.move_active_characters();
+			break;
 		}
 		case 'l': {
-			game.add_projectile(game.knight()->get_col(), game.knight()->get_row() + 1, 0, 1);
+			game.shoot(0, 1);
 			game.move_active_characters();
+			break;
 		}
 		default: {
 			continue;

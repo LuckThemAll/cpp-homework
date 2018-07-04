@@ -11,9 +11,13 @@ EventManager::EventManager()
 {
 	_move_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
 	_damage_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
+	_projectiles_move_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
+	_projectiles_spawn_events = std::make_shared<std::stack<std::shared_ptr<Event>>>();
 
 	_events_pool.push_back(_move_events);
-	_events_pool.push_back(_damage_events);	
+	_events_pool.push_back(_damage_events);
+	_events_pool.push_back(_projectiles_move_events);
+	_events_pool.push_back(_projectiles_spawn_events);
 }
 
 void EventManager::trigger_all(std::shared_ptr<Map> map_)
@@ -25,6 +29,12 @@ void EventManager::trigger_all(std::shared_ptr<Map> map_)
 		}
 	}
 	int a = 0;
+}
+
+void EventManager::add_projectile(std::shared_ptr<Character> projectile, int spawn_to_col, int spawn_to_row)
+{
+	auto a = new SpawnProjectileEvent(projectile, spawn_to_col, spawn_to_row);
+	_projectiles_spawn_events->emplace(a);
 }
 
 void EventManager::add_damage(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage)
@@ -49,7 +59,14 @@ void MoveEvent::trigger(std::shared_ptr<Map> map)
 
 void DamageEvent::trigger(std::shared_ptr<Map> map)
 {
-	if (!_from->is_dead()){
-		_to->take_damage(_damage);
-	}
+	_to->take_damage(_damage);
+}
+
+void SpawnProjectileEvent::trigger(std::shared_ptr<Map> map)
+{
+	auto cell = map->get_cell(_spawn_to_col, _spawn_to_row);
+	auto character = cell->get_character();
+	character->collide(*_projectile, map);
+
+	map->replace_character(_spawn_to_col, _spawn_to_row, _projectile);
 }

@@ -69,6 +69,16 @@ void Game::draw() {
 void Game::make_turn(EventManager event_manager)
 {
 	event_manager.trigger_all(_map_ptr);
+
+	for (auto i = _projectiles.begin(); i != _projectiles.end();) {
+		if (i->get()->is_dead()) {
+			_map_ptr->move_character(i->get()->get_col(), i->get()->get_row(), i->get()->get_col(), i->get()->get_row());
+			i = _projectiles.erase(i);
+		}
+		else
+			i++;
+	}
+
 	for (auto i = _active_characters.begin(); i != _active_characters.end();) {
 		if (i->get()->is_dead()) {
 			_map_ptr->move_character(i->get()->get_col(), i->get()->get_row(), i->get()->get_col(), i->get()->get_row());
@@ -82,18 +92,20 @@ void Game::make_turn(EventManager event_manager)
 
 void Game::move_active_characters()
 {
-	for (auto character : _projectiles) {
-		character->move_to(character->get_dir_col(), character->get_dir_row(), map());
-	}
+	//for (auto character : _projectiles) {
+		//character->move_to(character->get_dir_col(), character->get_dir_row(), map());
+	//}
 	//make_disitioon 
 	for (auto character : _active_characters) {
 		character->make_move_to_knight(knight()->get_col(), knight()->get_row(), map());
 	}
 }
 
-void Game::add_projectile(int col, int row, int dir_col, int dir_row)
+void Game::shoot(int dir_col, int dir_row)
 {
-	auto a = std::make_shared<Projectile>(col, row, dir_col, dir_row);
-	_projectiles.push_back(a);
-	a->move_to(col, row, map());
+	if (map()->is_inrange(_knight->get_col() + dir_col, _knight->get_row() + dir_row)){
+		auto a = std::make_shared<Projectile>(_knight->get_col(), _knight->get_row(), dir_col, dir_row);
+		_projectiles.push_back(a);
+		EventManager::get_manager().add_projectile(a, a->get_col() + a->get_dir_col(), a->get_row() + a->get_dir_row());
+	}
 }
