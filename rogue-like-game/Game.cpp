@@ -39,6 +39,14 @@ void Game::make_map()
 				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Princess>(i, j)));
 				continue;
 			}
+			if (s == 'H') {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Health>(i, j)));
+				continue;
+			}
+			if (s == 'E') {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Mana>(i, j)));
+				continue;
+			}
 		}
 	}
 }
@@ -62,6 +70,7 @@ void Game::draw() {
 			printw("\n");
 		}
 		addstr((" HP: " + std::to_string(_knight->get_hp()) + "\n").c_str());
+		addstr((" MP: " + std::to_string(_knight->mana()) + "\n").c_str());
 	}
 	refresh();
 }
@@ -111,9 +120,10 @@ void Game::move_active_characters()
 void Game::shoot(int dir_col, int dir_row)
 {
 	_knight->is_made_turn(true);
-	if (map()->is_inrange(_knight->get_col() + dir_col, _knight->get_row() + dir_row)){
-		auto a = std::make_shared<Projectile>(_knight->get_col(), _knight->get_row(), dir_col, dir_row);
+	auto a = std::make_shared<Projectile>(_knight->get_col(), _knight->get_row(), dir_col, dir_row);
+	if (map()->is_inrange(_knight->get_col() + dir_col, _knight->get_row() + dir_row) && _knight->mana() >= a->cost()){
 		EventManager::get_manager().add_projectile(a, a->get_col() + a->get_dir_col(), a->get_row() + a->get_dir_row());
+		_knight->mana(-a->cost());
 	}
 }
 
@@ -142,8 +152,3 @@ std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Charac
 {
 	return _projectiles.erase(index);
 }
-
-/*void Game::erase_projectile(int index)
-{
-	_projectiles.erase(index);
-}*/
