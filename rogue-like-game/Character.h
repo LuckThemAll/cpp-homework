@@ -29,8 +29,11 @@ public:
 	void kill() { _hp = 0; };
 	void is_made_turn(bool result) { _is_made_turn = result; };
 	bool is_made_turn() const { return _is_made_turn; }
-	virtual int get_dir_col() const { return 0; }
-	virtual int get_dir_row() const { return 0; }
+	virtual void set_dir_to_col(int to_col) { _dir_to_col = to_col; }
+	virtual void set_dir_to_row(int to_row) { _dir_to_row = to_row; }
+	virtual void set_dir(int to_col, int to_row) { set_dir_to_col(to_col); set_dir_to_row(to_row); }
+	virtual int get_dir_col() const { return _dir_to_col; }
+	virtual int get_dir_row() const { return _dir_to_row; }
 	virtual void move_to(int to_col, int to_row, const std::shared_ptr<Map> map) {}
 	virtual bool is_transparent() { return true; }
 	virtual void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) {};
@@ -44,6 +47,7 @@ public:
 protected:
 	bool _is_made_turn;
 private:
+	int _dir_to_col, _dir_to_row;
 	char _symbol;
 	int _col, _row;
 	double _damage, _hp;
@@ -79,7 +83,6 @@ class Knight : public ActiveCharacter
 public:
 	Knight(int col, int row, char symbol = 'K', double damage = 10, double hp = 1000) : 
 		ActiveCharacter(col, row, symbol, damage, hp), _is_winner(false) {};
-	//void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 	void collide(Princess &other, const std::shared_ptr<Map> map);
 	void set_win() { _is_winner = true; };
@@ -94,7 +97,6 @@ public:
 	Princess(int col, int row, char symbol = 'O', double damage = 0, double hp = 1) :
 		ActiveCharacter(col, row, symbol, damage, hp) {};
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
-	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map);
 	void collide(Knight &other, const std::shared_ptr<Map> map);
 };
 
@@ -115,8 +117,10 @@ class Wall : public Character
 {
 public:
 	Wall(int col, int row, char symbol = '#') : Character(col, row, symbol) {}
+	bool is_transparent() override { return false; }
 	void collide(Character &other, const std::shared_ptr<Map> map) override;
 	void collide(Projectile &other, const std::shared_ptr<Map> map) override;
+	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 };
 
 class Projectile : public ActiveCharacter
@@ -126,8 +130,11 @@ public:
 		char symbol = '*', double damage = 50, double hp = 1, bool is_made_turn = false)
 		: ActiveCharacter(col, row, symbol, damage, hp, is_made_turn), 
 		_dir_to_col(dir_to_col), _dir_to_row(dir_to_row) {}
+	void move_to(int to_col, int to_row, const std::shared_ptr<Map> map) override;
 	bool is_transparent() override { return true; }
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
+	void collide(Character &other, const std::shared_ptr<Map> map) override;
+	void collide(Princess &other, const std::shared_ptr<Map> map);
 	int get_dir_col() const override { return _dir_to_col; } 
 	int get_dir_row() const override { return _dir_to_row; }
 private:

@@ -19,9 +19,14 @@ public:
 	void make_turn(EventManager event_manager);
 	void move_active_characters();
 	void shoot(int dir_col, int dir_row);
-	std::vector<std::shared_ptr<Character>> get_projectiles() { return _projectiles; }
-	std::vector<std::shared_ptr<Character>> _projectiles;
+	std::vector<std::shared_ptr<Character>> get_projectiles();
+	void push_to_projectiles(std::shared_ptr<Character> projectile);
+	std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> get_projectile_begin();
+	std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> get_projectile_end();
+	std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>>
+		erase_projectile(std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> index);
 private:
+	std::vector<std::shared_ptr<Character>> _projectiles;
 	std::vector<std::shared_ptr<Character>> _active_characters;
 	std::shared_ptr<Knight> _knight;
 	std::shared_ptr<Map> _map_ptr;

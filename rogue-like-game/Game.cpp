@@ -75,7 +75,7 @@ void Game::make_turn(EventManager event_manager)
 			character->move_to(character->get_dir_col(), character->get_dir_row(), map());
 		}
 	}*/
-	
+	move_active_characters();
 	event_manager.trigger_all(*this, map());
 	event_manager.spawn_projectiles(*this, map());
 	for (auto i = _projectiles.begin(); i != _projectiles.end();) {
@@ -87,7 +87,7 @@ void Game::make_turn(EventManager event_manager)
 		else
 			i++;
 	}
-
+	_knight->is_made_turn(false);
 	for (auto i = _active_characters.begin(); i != _active_characters.end();) {
 		if (i->get()->is_dead()) {
 			_map_ptr->move_character(i->get()->get_col(), i->get()->get_row(), i->get()->get_col(), i->get()->get_row());
@@ -100,16 +100,50 @@ void Game::make_turn(EventManager event_manager)
 
 void Game::move_active_characters()
 {
-	//make_disitioon 
+	if (!_knight->is_made_turn())
+		_knight->move_to(_knight->get_dir_col(), _knight->get_dir_row(), _map_ptr);
 	for (auto character : _active_characters) {
-		character->make_move_to_knight(knight()->get_col(), knight()->get_row(), map());
+		if (!character->is_dead())
+			character->make_move_to_knight(knight()->get_col(), knight()->get_row(), map());
 	}
 }
 
 void Game::shoot(int dir_col, int dir_row)
 {
+	_knight->is_made_turn(true);
 	if (map()->is_inrange(_knight->get_col() + dir_col, _knight->get_row() + dir_row)){
 		auto a = std::make_shared<Projectile>(_knight->get_col(), _knight->get_row(), dir_col, dir_row);
 		EventManager::get_manager().add_projectile(a, a->get_col() + a->get_dir_col(), a->get_row() + a->get_dir_row());
 	}
 }
+
+std::vector<std::shared_ptr<Character>> Game::get_projectiles()
+{
+	return _projectiles;
+}
+
+void Game::push_to_projectiles(std::shared_ptr<Character> projectile)
+{
+	_projectiles.push_back(projectile);
+}
+
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> Game::get_projectile_begin()
+{
+	return _projectiles.begin();
+}
+
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> Game::get_projectile_end()
+{
+	return _projectiles.end();
+}
+
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>>
+	Game::erase_projectile(std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> index)
+{
+	return _projectiles.erase(index);
+}
+
+/*void Game::erase_projectile(int index)
+{
+	_projectiles.erase(index);
+}*/

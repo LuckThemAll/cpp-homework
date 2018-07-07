@@ -25,7 +25,6 @@ void EventManager::trigger_all(Game & game, std::shared_ptr<Map> map)
 			ev->pop();
 		}
 	}
-	int a = 0;
 }
 
 void EventManager::spawn_projectiles(Game & game, std::shared_ptr<Map> map)
@@ -39,18 +38,19 @@ void EventManager::spawn_projectiles(Game & game, std::shared_ptr<Map> map)
 
 void EventManager::move_projectiles(Game & game, std::shared_ptr<Map> map)
 {
-	if (!game.get_projectiles().empty()) {
-		for (auto i = game._projectiles.begin(); i != game._projectiles.end();) {
-			auto projectile = i->get();
-			projectile->move_to(projectile->get_dir_col(), projectile->get_dir_row(), map);
-			projectile->is_made_turn(true);
-			trigger_all(game, map);
+	for (auto i = game.get_projectile_begin(); i != game.get_projectile_end();) {
+		auto projectile = i->get();
+		projectile->move_to(projectile->get_dir_col(), projectile->get_dir_row(), map);
+		projectile->is_made_turn(true);
+		trigger_all(game, map);
 
-			if (projectile->is_dead())
-				i = game._projectiles.erase(i);
-			else
-				i++;
+		if (projectile->is_dead()){
+			map->move_character(projectile->get_col(), projectile->get_row(), 
+				projectile->get_col(), projectile->get_row());
+			i = game.erase_projectile(i);
 		}
+		else
+			i++;
 	}
 }
 
@@ -95,6 +95,6 @@ void SpawnProjectileEvent::trigger(Game & game, std::shared_ptr<Map> map)
 		map->spawn_character(_spawn_to_col, _spawn_to_row, _projectile);
 	else
 		character->collide(*_projectile, map);
-	game._projectiles.push_back(_projectile);
+	game.push_to_projectiles(_projectile);
 	int a = 0;
 }

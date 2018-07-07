@@ -15,43 +15,35 @@ void UI::start_game()
 		int key = getch();
 		switch (key) {
 		case 'w': {
-			game.move_active_characters();
-			game.knight()->move_to(-1, 0, game.map());
+			game.knight()->set_dir(-1, 0);
 			break;
 		}
 		case 's': {
-			game.move_active_characters();
-			game.knight()->move_to(1, 0, game.map());
+			game.knight()->set_dir(1, 0);
 			break;
 		}
 		case 'd': {
-			game.move_active_characters();
-			game.knight()->move_to(0, 1, game.map());
+			game.knight()->set_dir(0, 1);
 			break;
 		}
 		case 'a': {
-			game.move_active_characters();
-			game.knight()->move_to(0, -1, game.map());
+			game.knight()->set_dir(0, -1);
 			break;
 		}
 		case 'k': {
 			game.shoot(1, 0);
-			game.move_active_characters();
 			break;
 		}
 		case 'i': {
 			game.shoot(-1, 0);
-			game.move_active_characters();
 			break;
 		}
 		case 'j': {
 			game.shoot(0, -1);
-			game.move_active_characters();
 			break;
 		}
 		case 'l': {
 			game.shoot(0, 1);
-			game.move_active_characters();
 			break;
 		}
 		default: {
