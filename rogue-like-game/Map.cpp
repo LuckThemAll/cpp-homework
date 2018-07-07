@@ -25,7 +25,7 @@ void Map::move_character(int from_col, int from_row, int to_col, int to_row, std
 	if (!get_cell(to_col, to_row)->get_character()->is_transparent() && !get_cell(to_col, to_row)->get_character()->is_dead())
 		return;
 	if (!replace_character) {
-		replace_character = std::make_shared<EmptyFloor>(from_col, from_row, '.');
+		replace_character = std::make_shared<EmptyFloor>(from_col, from_row);
 	}
 	get_cell(to_col, to_row)->set_character(get_cell(from_col, from_row)->get_character());
 	get_cell(to_col, to_row)->get_character()->set_pos(to_col, to_row);

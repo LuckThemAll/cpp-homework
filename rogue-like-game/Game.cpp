@@ -59,7 +59,7 @@ void Game::draw() {
 	if (_knight->is_winner()) {
 		printw("woowowowowowoow, u are WIIIIINENNENENNEER");
 	}
-	if (_knight->is_dead()) {
+	else if (_knight->is_dead()) {
 		printw("OOOOOOOOOOOOpppsssss, U DIED");
 	}
 	else{
@@ -70,8 +70,12 @@ void Game::draw() {
 				k[1] = '\0';
 				printw(k);
 			}
-			printw("\n");
+			printw("|\n");
 		}
+		for (int i = 0; i < 20; i++) {
+			printw("_");
+		}
+		printw("\n");
 		addstr((" HP: " + std::to_string(_knight->get_hp()) + "\n").c_str());
 		addstr((" MP: " + std::to_string(_knight->mana()) + "\n").c_str());
 	}
@@ -82,11 +86,6 @@ void Game::make_turn(EventManager event_manager)
 {
 	event_manager.move_projectiles(*this, map());
 	
-	/*for (auto character : _projectiles) {
-		if (!character->is_made_turn()) {
-			character->move_to(character->get_dir_col(), character->get_dir_row(), map());
-		}
-	}*/
 	move_active_characters();
 	event_manager.trigger_all(*this, map());
 	event_manager.spawn_projectiles(*this, map());
