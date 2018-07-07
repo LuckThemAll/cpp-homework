@@ -59,6 +59,9 @@ void Game::draw() {
 	if (_knight->is_winner()) {
 		printw("woowowowowowoow, u are WIIIIINENNENENNEER");
 	}
+	if (_knight->is_dead()) {
+		printw("OOOOOOOOOOOOpppsssss, U DIED");
+	}
 	else{
 		for (int i = 0; i < _map_ptr->get_cols_num(); i++) {
 			for (int j = 0; j < _map_ptr->get_rows_num(); j++) {

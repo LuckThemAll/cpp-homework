@@ -91,8 +91,8 @@ public:
 class Knight : public ActiveCharacter
 {
 public:
-	Knight(int col, int row, char symbol = 'K', double damage = 10, double hp = 1000) : 
-		ActiveCharacter(col, row, symbol, damage, hp), _is_winner(false), _mana(500) {};
+	Knight(int col, int row, char symbol = 'K', double damage = 10, double hp = 200) : 
+		ActiveCharacter(col, row, symbol, damage, hp), _is_winner(false), _mana(200) {};
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 	void collide(Princess &other, const std::shared_ptr<Map> map);
 	void collide(Health &other, const std::shared_ptr<Map> map) override;
