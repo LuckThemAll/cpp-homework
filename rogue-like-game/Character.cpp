@@ -105,6 +105,28 @@ void Knight::collide(Mana & other, const std::shared_ptr<Map> map)
 	other.collide(*this, map);
 }
 
+void Knight::set_dir(Direction dir)
+{
+	switch (dir) {
+	case Direction::UP:
+		set_dir_col(-1);
+		set_dir_row(0);
+		break;
+	case Direction::DOWN:
+		set_dir_col(1);
+		set_dir_row(0);
+		break;
+	case Direction::RIGHT:
+		set_dir_col(0);
+		set_dir_row(1);
+		break;
+	case Direction::LEFT:
+		set_dir_col(0);
+		set_dir_row(-1);
+		break;
+	}
+}
+
 void EmptyFloor::collide(Character & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);

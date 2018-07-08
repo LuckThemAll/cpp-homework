@@ -15,35 +15,35 @@ void UI::start_game()
 		int key = getch();
 		switch (key) {
 		case 'w': {
-			game.knight()->set_dir(-1, 0);
+			game.knight()->set_dir(Direction::UP);
 			break;
 		}
 		case 's': {
-			game.knight()->set_dir(1, 0);
+			game.knight()->set_dir(Direction::DOWN);
 			break;
 		}
 		case 'd': {
-			game.knight()->set_dir(0, 1);
+			game.knight()->set_dir(Direction::RIGHT);
 			break;
 		}
 		case 'a': {
-			game.knight()->set_dir(0, -1);
+			game.knight()->set_dir(Direction::LEFT);
 			break;
 		}
 		case 'k': {
-			game.shoot(1, 0);
+			game.shoot(Direction::DOWN);
 			break;
 		}
 		case 'i': {
-			game.shoot(-1, 0);
+			game.shoot(Direction::UP);
 			break;
 		}
 		case 'j': {
-			game.shoot(0, -1);
+			game.shoot(Direction::LEFT);
 			break;
 		}
 		case 'l': {
-			game.shoot(0, 1);
+			game.shoot(Direction::RIGHT);
 			break;
 		}
 		default: {

@@ -16,6 +16,8 @@ class HealCharacter;
 class Health;
 class Mana;
 
+enum class Direction {LEFT, RIGHT, DOWN, UP};
+
 class Character : public std::enable_shared_from_this<Character>
 {
 public:
@@ -102,7 +104,7 @@ public:
 	double mana() const { return _mana; }
 	void set_dir_col(int to_col) { _dir_col = to_col; }
 	void set_dir_row(int to_row) { _dir_row = to_row; }
-	void set_dir(int to_col, int to_row) { set_dir_col(to_col); set_dir_row(to_row); }
+	void set_dir(Direction dir);
 
 	int get_dir_col() const { return _dir_col; }
 	int get_dir_row() const { return _dir_row; }

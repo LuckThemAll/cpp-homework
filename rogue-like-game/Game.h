@@ -1,6 +1,7 @@
 #pragma once
 #include "curses.h"
 #include "Map.h"
+#include "Character.h"
 
 class Game;
 class Knight;
@@ -8,6 +9,7 @@ class EventManager;
 class Map;
 class Character;
 class Projectile;
+enum class Direction;
 
 class Game 
 {
@@ -20,7 +22,7 @@ public:
 	void draw();
 	void make_turn(EventManager event_manager);
 	void move_active_characters();
-	void shoot(int dir_col, int dir_row);
+	void shoot(Direction dir);
 	void set_princess(std::shared_ptr<Character> princess);
 	std::vector<std::shared_ptr<Projectile>> get_projectiles();
 	void push_to_projectiles(std::shared_ptr<Projectile> projectile);

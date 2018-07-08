@@ -125,9 +125,28 @@ void Game::move_active_characters()
 	}
 }
 
-void Game::shoot(int dir_col, int dir_row)
+void Game::shoot(Direction dir)
 {
 	_knight->is_made_turn(true);
+	int dir_col, dir_row;
+	switch (dir) {
+	case Direction::UP:
+		dir_col = -1;
+		dir_row = 0;
+		break;
+	case Direction::DOWN:
+		dir_col = 1;
+		dir_row = 0;
+		break;
+	case Direction::RIGHT:
+		dir_col = 0;
+		dir_row = 1;
+		break;
+	case Direction::LEFT:
+		dir_col = 0;
+		dir_row = -1;
+		break;
+	}
 	auto a = std::make_shared<Projectile>(_knight->get_col(), _knight->get_row(), dir_col, dir_row);
 	if (map()->is_inrange(_knight->get_col() + dir_col, _knight->get_row() + dir_row) && _knight->mana() >= a->cost()){
 		EventManager::get_manager().add_projectile(a, a->get_col() + a->get_dir_col(), a->get_row() + a->get_dir_row());
