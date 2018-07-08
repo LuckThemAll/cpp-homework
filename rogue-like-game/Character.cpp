@@ -27,14 +27,14 @@ void Character::collide(Princess & other, const std::shared_ptr<Map> map)
 	other.collide(*this, map);
 }
 
-void Character::collide(Health & other, const std::shared_ptr<Map> map)
+void Character::collide(HealCharacter & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
 }
 
-void Character::collide(Mana & other, const std::shared_ptr<Map> map)
+void Character::collide(Knight & other, const std::shared_ptr<Map> map)
 {
-	other.collide(*this, map);
+//	other.collide(*this, map);
 }
 
 void ActiveCharacter::move_to(int to_col, int to_row, const std::shared_ptr<Map> map)
@@ -70,17 +70,12 @@ void ActiveCharacter::collide(Projectile & other, const std::shared_ptr<Map> map
 {
 	if (!other.is_dead()) {
 		EventManager::get_manager().add_damage(other.get_ptr(), get_ptr(), other.get_damage());
-		other.kill();
+		other.self_kill();
 	}
 	EventManager::get_manager().add_move(get_ptr(), other.get_col(), other.get_row());
 }
 
-void ActiveCharacter::collide(Health & other, const std::shared_ptr<Map> map)
-{
-	other.collide(*this, map);
-}
-
-void ActiveCharacter::collide(Mana & other, const std::shared_ptr<Map> map)
+void ActiveCharacter::collide(HealCharacter & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
 }
@@ -95,18 +90,19 @@ void Knight::collide(Princess & other, const std::shared_ptr<Map> map)
 	other.collide(*this, map);
 }
 
+void Knight::collide(HealCharacter & other, const std::shared_ptr<Map> map)
+{
+	other.collide(*this, map);
+}
+
 void Knight::collide(Health & other, const std::shared_ptr<Map> map)
 {
-	heal(other.get_hp());
-	EventManager::get_manager().add_move(get_ptr(), other.get_col(), other.get_row());
-	other.kill();
+	other.collide(*this, map);
 }
 
 void Knight::collide(Mana & other, const std::shared_ptr<Map> map)
 {
-	mana(other.get_hp());
-	EventManager::get_manager().add_move(get_ptr(), other.get_col(), other.get_row());
-	other.kill();
+	other.collide(*this, map);
 }
 
 void EmptyFloor::collide(Character & other, const std::shared_ptr<Map> map)
@@ -126,7 +122,7 @@ void Wall::collide(Character & other, const std::shared_ptr<Map> map)
 
 void Wall::collide(Projectile & other, const std::shared_ptr<Map> map)
 {
-	other.kill();
+	other.self_kill();
 }
 
 void Wall::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
@@ -148,15 +144,11 @@ void Monster::collide(Princess & other, const std::shared_ptr<Map> map)
 	//nothing
 }
 
-void Monster::collide(Health & other, const std::shared_ptr<Map> map)
+void Monster::collide(HealCharacter & other, const std::shared_ptr<Map> map)
 {
 	//nothing
 }
 
-void Monster::collide(Mana & other, const std::shared_ptr<Map> map)
-{
-	//nothing
-}
 
 void Monster::make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map)
 {
@@ -178,14 +170,14 @@ void Projectile::move_to(int to_col, int to_row, const std::shared_ptr<Map> map)
 		auto character = cell->get_character();
 		character->collide(*get_ptr(), map);
 	}
-	else kill();
+	else self_kill();
 }
 
 void Projectile::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
 	if (!other.is_dead()){
 		EventManager::get_manager().add_damage(get_ptr(), other.get_ptr(), get_damage());
-		kill();
+		self_kill();
 	}
 	else
 		EventManager::get_manager().add_move(get_ptr(), other.get_col(), other.get_row());
@@ -198,15 +190,10 @@ void Projectile::collide(Character & other, const std::shared_ptr<Map> map)
 
 void Projectile::collide(Princess & other, const std::shared_ptr<Map> map)
 {
-	kill();
+	self_kill();
 }
 
-void Projectile::collide(Health & other, const std::shared_ptr<Map> map)
-{
-	other.collide(*this, map);
-}
-
-void Projectile::collide(Mana & other, const std::shared_ptr<Map> map)
+void Projectile::collide(HealCharacter & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
 }
@@ -218,41 +205,42 @@ void Princess::collide(Character & other, const std::shared_ptr<Map> map)
 
 void Princess::collide(Knight & other, const std::shared_ptr<Map> map)
 {
-	other.set_win();
+	other.set_pos(get_col(), get_row());
 }
 
-void Health::collide(Character & other, const std::shared_ptr<Map> map)
+void HealCharacter::collide(Character & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
 }
 
-void Health::collide(Projectile & other, const std::shared_ptr<Map> map)
+void HealCharacter::collide(Projectile & other, const std::shared_ptr<Map> map)
 {
 	if (!other.is_dead()) {
-		kill();
+		self_kill();
 		EventManager::get_manager().add_move(other.get_ptr(), get_col(), get_row());
 	}
 }
 
-void Health::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
+void HealCharacter::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
 }
 
-void Mana::collide(Character & other, const std::shared_ptr<Map> map)
+void HealCharacter::collide(Knight & other, const std::shared_ptr<Map> map)
 {
 	other.collide(*this, map);
 }
 
-void Mana::collide(Projectile & other, const std::shared_ptr<Map> map)
+void Health::collide(Knight & other, const std::shared_ptr<Map> map)
 {
-	if (!other.is_dead()) {
-		kill();
-		EventManager::get_manager().add_move(other.get_ptr(), get_col(), get_row());
-	}
+	other.heal(get_hp());
+	EventManager::get_manager().add_move(other.get_ptr(), get_col(), get_row());
+	self_kill();
 }
 
-void Mana::collide(ActiveCharacter & other, const std::shared_ptr<Map> map)
+void Mana::collide(Knight & other, const std::shared_ptr<Map> map)
 {
-	other.collide(*this, map);
+	other.mana(get_hp());
+	EventManager::get_manager().add_move(other.get_ptr(), get_col(), get_row());
+	self_kill();
 }

@@ -54,7 +54,7 @@ void EventManager::move_projectiles(Game & game, std::shared_ptr<Map> map)
 	}
 }
 
-void EventManager::add_projectile(std::shared_ptr<Character> projectile, int spawn_to_col, int spawn_to_row)
+void EventManager::add_projectile(std::shared_ptr<Projectile> projectile, int spawn_to_col, int spawn_to_row)
 {
 	auto a = new SpawnProjectileEvent(projectile, spawn_to_col, spawn_to_row);
 	projectile->is_made_turn(true);

@@ -4,6 +4,11 @@
 #include <fstream>
 
 
+bool Game::is_win(std::shared_ptr<Character> princess)
+{
+	return princess->get_col() == _knight->get_col() && princess->get_row() == _knight->get_row();
+}
+
 void Game::make_map()
 {
 	std::ifstream file;
@@ -37,6 +42,7 @@ void Game::make_map()
 			}
 			if (s == 'O') {
 				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Princess>(i, j)));
+				set_princess(_map_ptr->get_cell(i, j)->get_character());
 				continue;
 			}
 			if (s == 'H') {
@@ -56,7 +62,7 @@ void Game::draw() {
 	noecho();
 	raw();
 	clear();
-	if (_knight->is_winner()) {
+	if (is_win(_princess)) {
 		printw("woowowowowowoow, u are WIIIIINENNENENNEER");
 	}
 	else if (_knight->is_dead()) {
@@ -66,7 +72,7 @@ void Game::draw() {
 		for (int i = 0; i < _map_ptr->get_cols_num(); i++) {
 			for (int j = 0; j < _map_ptr->get_rows_num(); j++) {
 				char k[2];
-				k[0] = _map_ptr->get_cell(i, j)->get_character()->get_symbol();
+				k[0] = _map_ptr->get_cell(i, j)->get_character()->get_symbol()[0];
 				k[1] = '\0';
 				printw(k);
 			}
@@ -129,28 +135,33 @@ void Game::shoot(int dir_col, int dir_row)
 	}
 }
 
-std::vector<std::shared_ptr<Character>> Game::get_projectiles()
+void Game::set_princess(std::shared_ptr<Character> princess)
+{
+	_princess = princess;
+}
+
+std::vector<std::shared_ptr<Projectile>> Game::get_projectiles()
 {
 	return _projectiles;
 }
 
-void Game::push_to_projectiles(std::shared_ptr<Character> projectile)
+void Game::push_to_projectiles(std::shared_ptr<Projectile> projectile)
 {
 	_projectiles.push_back(projectile);
 }
 
-std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> Game::get_projectile_begin()
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Projectile>>>> Game::get_projectile_begin()
 {
 	return _projectiles.begin();
 }
 
-std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> Game::get_projectile_end()
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Projectile>>>> Game::get_projectile_end()
 {
 	return _projectiles.end();
 }
 
-std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>>
-	Game::erase_projectile(std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Character>>>> index)
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Projectile>>>>
+	Game::erase_projectile(std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::shared_ptr<Projectile>>>> index)
 {
 	return _projectiles.erase(index);
 }

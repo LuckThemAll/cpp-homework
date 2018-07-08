@@ -47,7 +47,8 @@ void UI::start_game()
 			break;
 		}
 		default: {
-			continue;
+			game.knight()->is_made_turn(true);
+			break;
 		}
 		}
 		game.make_turn(EventManager::get_manager());

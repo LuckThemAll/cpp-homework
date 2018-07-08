@@ -10,6 +10,7 @@ class MoveEvent;
 class DamageEvent;
 class SpawnProjectileEvent;
 class Character;
+class Projectile;
 class Map;
 class Game;
 
@@ -21,7 +22,7 @@ public:
 	void trigger_all(Game & game, std::shared_ptr<Map> map);
 	void spawn_projectiles(Game & game, std::shared_ptr<Map> map);
 	void move_projectiles(Game & game, std::shared_ptr<Map> map);
-	void add_projectile(std::shared_ptr<Character> projectile, int spawn_to_col, int spawn_to_row);
+	void add_projectile(std::shared_ptr<Projectile> projectile, int spawn_to_col, int spawn_to_row);
 	void add_damage(std::shared_ptr<Character> from, std::shared_ptr<Character> to, double damage);
 	void add_move(std::shared_ptr<Character> character, int to_row, int to_col);
 private:
@@ -65,11 +66,11 @@ private:
 class SpawnProjectileEvent : public Event
 {
 public:
-	SpawnProjectileEvent(std::shared_ptr<Character> projectile, int spawn_to_col, int spawn_to_row)
+	SpawnProjectileEvent(std::shared_ptr<Projectile> projectile, int spawn_to_col, int spawn_to_row)
 		: _projectile(projectile), _spawn_to_row(spawn_to_row), _spawn_to_col(spawn_to_col) {}
 
 	void trigger(Game & game, std::shared_ptr<Map> map);
 private:
-	std::shared_ptr<Character> _projectile;
+	std::shared_ptr<Projectile> _projectile;
 	int _spawn_to_row, _spawn_to_col;
 };
