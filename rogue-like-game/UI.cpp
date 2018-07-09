@@ -10,51 +10,38 @@ void UI::start_game()
 {
 	Game game(std::make_shared<Map>(), std::make_shared<Config>());
 	game.draw();
-	halfdelay(2);
+	halfdelay(1);
+	const auto cfg = game.config()->json();
 	while (true) {
 		int key = getch();
-		switch (key) {
-		case 'w': {
+		if (key == cfg["move_up"]) {
 			game.knight()->set_dir(Direction::UP);
-			break;
-		}
-		case 's': {
+		}else
+		if (key == cfg["move_down"]) {
 			game.knight()->set_dir(Direction::DOWN);
-			break;
-		}
-		case 'd': {
+		}else
+		if (key == cfg["move_right"]) {
 			game.knight()->set_dir(Direction::RIGHT);
-			break;
-		}
-		case 'a': {
+		}else
+		if (key == cfg["move_left"]) {
 			game.knight()->set_dir(Direction::LEFT);
-			break;
-		}
-		case 'k': {
+		}else
+		if (key == cfg["shoot_down"]) {
 			game.shoot(Direction::DOWN);
-			break;
-		}
-		case 'i': {
+		}else
+		if (key == cfg["shoot_up"]) {
 			game.shoot(Direction::UP);
-			break;
-		}
-		case 'j': {
+		}else
+		if (key == cfg["shoot_left"]) {
 			game.shoot(Direction::LEFT);
-			break;
-		}
-		case 'l': {
+		}else
+		if (key == cfg["shoot_right"]) {
 			game.shoot(Direction::RIGHT);
-			break;
-		}
-		case 'r': {
+		}else
+		if (key == cfg["restart"]) {
 			game.restart();
-			break;
-		}
-		default: {
+		}else
 			game.knight()->is_made_turn(true);
-			break;
-		}
-		}
 		game.make_turn(EventManager::get_manager());
 		game.draw();
 	}
