@@ -29,8 +29,6 @@ public:
 	std::string get_symbol() const { return _symbol; }
 	double get_damage() const { return _damage; }
 	double get_hp() const { return _hp; }
-	//virtual int get_dir_col() const { return _dir_col; }
-	//virtual int get_dir_row() const { return _dir_row; }
 	virtual bool is_transparent() const { return true; }
 	bool is_dead() const { return _hp <= 0; }
 	bool is_made_turn() const { return _is_made_turn; }
@@ -94,8 +92,8 @@ protected:
 class Knight : public ActiveCharacter
 {
 public:
-	Knight(int col, int row, std::string symbol = "K", double damage = 10, double hp = 1000) :
-		ActiveCharacter(col, row, symbol, damage, hp),  _mana(10000) {};
+	Knight(int col, int row, std::string symbol = "K", double damage = 10, double hp = 1000, double mana = 10000) :
+		ActiveCharacter(col, row, symbol, damage, hp),  _mana(mana) {};
 	void collide(ActiveCharacter &other, const std::shared_ptr<Map> map) override;
 	void collide(Princess &other, const std::shared_ptr<Map> map);
 	void collide(HealCharacter &other, const std::shared_ptr<Map> map);

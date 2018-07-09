@@ -31,6 +31,7 @@ public:
 	Map() {}
 	Map(std::vector<std::vector<std::shared_ptr<MapCell>>> map) : _map(map) {}
 	std::shared_ptr<MapCell> get_cell(int col, int row) { return _map[col][row]; }
+	void clear_map();
 	void set_cell(int col, int row, std::shared_ptr<MapCell> cell);
 	auto get_map() { return &_map; }
 	int get_cols_num() { return (_map.size()); }

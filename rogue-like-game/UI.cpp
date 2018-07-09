@@ -8,9 +8,9 @@
 
 void UI::start_game()
 {
-	Game game(std::make_shared<Map>(), std::make_shared<Knight>(0, 0));
-	game.make_map();
+	Game game(std::make_shared<Map>(), std::make_shared<Config>());
 	game.draw();
+	halfdelay(2);
 	while (true) {
 		int key = getch();
 		switch (key) {
@@ -44,6 +44,10 @@ void UI::start_game()
 		}
 		case 'l': {
 			game.shoot(Direction::RIGHT);
+			break;
+		}
+		case 'r': {
+			game.restart();
 			break;
 		}
 		default: {

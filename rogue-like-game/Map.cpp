@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "Map.h"
 
+void Map::clear_map()
+{
+	_map.clear();
+}
+
 void Map::set_cell(int col, int row, std::shared_ptr<MapCell> cell)
 {
 	_map[col][row] = cell;

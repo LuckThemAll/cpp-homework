@@ -1,0 +1,52 @@
+{
+  "width" : 20,
+  "height" : 20,
+  "move_left": "a",
+  "move_right": "d",
+  "move_up": "w",
+  "move_down": "s",
+  "shoot_left": "j",
+  "shoot_right": "l",
+  "shoot_up": "i",
+  "shoot_down": "k",
+  "Character":{
+    "hp" : 2147483647,
+    "damage" : 0,
+    "symbol" : " "
+  },
+  "EmptyFloor":{
+	"symbol_for_parse" : ".",
+	"symbol": " "
+  },
+  "Knight":{
+    "hp" : 10000,
+    "damage" : 20,
+    "symbol" : "K",
+    "mana" : 10000
+  },
+  "Princess":{
+    "symbol" : "P"
+  },
+  "Wall":{
+    "symbol" : "#"
+  },
+  "Health":{
+    "symbol" : "h",
+    "hp" : 200
+  },
+  "Mana":{
+    "symbol" : "m",
+    "hp" : 200
+  },
+  "Projectile":{
+    "damage" : 25,
+    "symbol": "*",
+    "cost" : 25
+  },
+  "Monster":{
+    "hp" : 100,
+	"visibility": 5,
+    "damage" : 25,
+    "symbol" : "M"
+  }
+}

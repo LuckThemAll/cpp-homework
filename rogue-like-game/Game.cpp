@@ -3,6 +3,18 @@
 #include <string>
 #include <fstream>
 
+Game::Game(std::shared_ptr<Map> map_ptr, std::shared_ptr<Config> conf)
+{
+	_win = false;
+	_loose = false;
+	_map_ptr = map_ptr;
+	_config = conf;
+	const auto cfg = config()->json();
+	_knight = std::make_shared<Knight>(0, 0, cfg["Knight"]["symbol"],
+		cfg["Knight"]["damage"], cfg["Knight"]["hp"], cfg["Knight"]["mana"]);
+	make_map();
+
+}
 
 bool Game::is_win(std::shared_ptr<Character> princess)
 {
@@ -13,44 +25,52 @@ void Game::make_map()
 {
 	std::ifstream file;
 	file.open("map.txt");
-	int height, width;
-	file >> height >> width;
-	char s;
+	const auto cfg = config()->json();
+	int height = cfg["height"], width = cfg["width"];
+	std::string s;
 	_map_ptr->get_map()->resize(height);
 	auto a = _map_ptr;
 	for (int i = 0; i < height; ++i) {
 		_map_ptr->get_col(i).resize(width);
+		file >> s;
 		for (int j = 0; j < width; ++j) {
-			file >> s;
+			char c = s[j];
+			auto mem = cfg["EmptyFloor"]["symbol"].dump()[1];
 			if (i == 0 && j == 0) {
 				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), knight()));
 				continue;
 			}
-			if (s == '#') {
+			if (c == cfg["Wall"]["symbol"].dump()[1]) {
 				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Wall>(i, j)));
 				continue;
 			}
-			if (s == '.') {
-				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<EmptyFloor>(i, j)));
+			if (c == cfg["EmptyFloor"]["symbol_for_parse"].dump()[1]) {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), 
+					std::make_shared<EmptyFloor>(i, j, cfg["EmptyFloor"]["symbol"])));
 				continue;
 			}
-			if (s == 'M') {
-				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Monster>(i, j)));
+			if (c == cfg["Monster"]["symbol"].dump()[1]) {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), 
+					std::make_shared<Monster>(i, j, cfg["Monster"]["symbol"], cfg["Monster"]["visibility"], 
+						cfg["Monster"]["damage"], cfg["Monster"]["hp"])));
 				auto a = _map_ptr->get_cell(i, j)->get_character();
 				_active_characters.push_back( a);
 				continue;
 			}
-			if (s == 'O') {
-				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Princess>(i, j)));
+			if (c == cfg["Princess"]["symbol"].dump()[1]) {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), 
+					std::make_shared<Princess>(i, j, cfg["Princess"]["symbol"])));
 				set_princess(_map_ptr->get_cell(i, j)->get_character());
 				continue;
 			}
-			if (s == 'H') {
-				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Health>(i, j)));
+			if (c == cfg["Health"]["symbol"].dump()[1]) {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), 
+					std::make_shared<Health>(i, j, cfg["Health"]["symbol"], cfg["Character"]["damage"], cfg["Health"]["hp"])));
 				continue;
 			}
-			if (s == 'E') {
-				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), std::make_shared<Mana>(i, j)));
+			if (c == cfg["Mana"]["symbol"].dump()[1]) {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<Character>(i, j), 
+					std::make_shared<Mana>(i, j, cfg["Mana"]["symbol"], cfg["Character"]["damage"], cfg["Mana"]["hp"])));
 				continue;
 			}
 		}
@@ -62,29 +82,41 @@ void Game::draw() {
 	noecho();
 	raw();
 	clear();
-	if (is_win(_princess)) {
-		printw("woowowowowowoow, u are WIIIIINENNENENNEER");
-	}
-	else if (_knight->is_dead()) {
-		printw("OOOOOOOOOOOOpppsssss, U DIED");
-	}
-	else{
-		for (int i = 0; i < _map_ptr->get_cols_num(); i++) {
-			for (int j = 0; j < _map_ptr->get_rows_num(); j++) {
-				char k[2];
-				k[0] = _map_ptr->get_cell(i, j)->get_character()->get_symbol()[0];
-				k[1] = '\0';
-				printw(k);
+	if (!_win && !_loose){
+		if (is_win(_princess)) {
+			set_win(true);
+			printw("woowowowowowoow, u are WIIIIINENNENENNEER\n");
+			printw("press \"r\" ro restert");
+		}
+		else if (_knight->is_dead()) {
+			set_loose(true);
+			printw("OOOOOOOOOOOOpppsssss, U DIED/n");
+			printw("press \"r\" ro restert");
+		}else{
+			for (int i = 0; i < _map_ptr->get_cols_num(); i++) {
+				for (int j = 0; j < _map_ptr->get_rows_num(); j++) {
+					char k[2];
+					k[0] = _map_ptr->get_cell(i, j)->get_character()->get_symbol()[0];
+					k[1] = '\0';
+					printw(k);
+				}
+				printw("|\n");
 			}
-			printw("|\n");
+			for (int i = 0; i < 20; i++) {
+				printw("_");
+			}
+			printw("\n");
+			addstr((" HP: " + std::to_string(_knight->get_hp()) + "\n").c_str());
+			addstr((" MP: " + std::to_string(_knight->mana()) + "\n").c_str());
 		}
-		for (int i = 0; i < 20; i++) {
-			printw("_");
-		}
-		printw("\n");
-		addstr((" HP: " + std::to_string(_knight->get_hp()) + "\n").c_str());
-		addstr((" MP: " + std::to_string(_knight->mana()) + "\n").c_str());
 	}
+	else
+		if (_win) {
+			printw("woowowowowowoow, u are WIIIIINENNENENNEER \n press \"r\" to restart");
+		}
+		else{
+			printw("OOOOOOOOOOOOpppsssss, U DIED \n press \"r\" to restart");
+		}	
 	refresh();
 }
 
@@ -157,6 +189,20 @@ void Game::shoot(Direction dir)
 void Game::set_princess(std::shared_ptr<Character> princess)
 {
 	_princess = princess;
+}
+
+void Game::restart()
+{
+	_projectiles.clear();
+	_active_characters.clear();
+	_map_ptr->clear_map();
+	set_loose(false);
+	set_win(false);
+
+	const auto cfg = config()->json();
+	_knight = std::make_shared<Knight>(0, 0, cfg["Knight"]["symbol"],
+		cfg["Knight"]["damage"], cfg["Knight"]["hp"], cfg["Knight"]["mana"]);
+	make_map();
 }
 
 std::vector<std::shared_ptr<Projectile>> Game::get_projectiles()
