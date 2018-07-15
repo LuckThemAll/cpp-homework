@@ -30,7 +30,7 @@ private:
 	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _damage_events;
 	std::shared_ptr<std::stack<std::shared_ptr<Event>>> _projectiles_spawn_events;
 
-	std::deque<std::shared_ptr<std::stack<std::shared_ptr<Event>>>> _events_pool;
+	std::vector<std::shared_ptr<std::stack<std::shared_ptr<Event>>>> _events_pool;
 };
 
 class Event {
