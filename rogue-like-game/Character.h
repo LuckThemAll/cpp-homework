@@ -131,9 +131,16 @@ public:
 	void collide(HealCharacter &other, const std::shared_ptr<Map> map) override;
 	void make_move_to_knight(int knight_col, int knight_row, const std::shared_ptr<Map> map) override;
 	int get_visibility() const { return _visibility; }
-private:
+protected:
 	int _visibility;
 };
+
+class Zombie : public Monster {
+public:
+	Zombie(int col, int row, std::string symbol = "Z", int visibility = 7, double damage = 40, double hp = 150) :
+		Monster(col, row, symbol, visibility, damage, hp) {};
+};
+
 
 class Wall : public Character
 {

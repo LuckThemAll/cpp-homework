@@ -76,6 +76,14 @@ void Game::make_map()
 					std::make_shared<Mana>(i, j, cfg["Mana"][symbol_str], cfg["Character"][damage_str], cfg["Mana"][hp_str])));
 				continue;
 			}
+			if (c == cfg["Zombie"][symbol_str].dump()[1]) {
+				_map_ptr->set_cell(i, j, std::make_shared<MapCell>(std::make_shared<EmptyFloor>(i, j),
+					std::make_shared<Zombie>(i, j, cfg["Zombie"][symbol_str], cfg["Zombie"]["visibility"],
+						cfg["Zombie"][damage_str], cfg["Zombie"][hp_str])));
+				auto a = _map_ptr->get_cell(i, j)->get_character();
+				_active_characters.push_back(a);
+				continue;
+			}
 		}
 	}
 }

@@ -1,6 +1,6 @@
 {
-  "width" : 20,
-  "height" : 20,
+  "width": 20,
+  "height": 20,
   "move_left": 97,
   "move_right": 100,
   "move_up": 119,
@@ -10,44 +10,50 @@
   "shoot_right": 108,
   "shoot_up": 105,
   "shoot_down": 107,
-  "Character":{
-    "hp" : 2147483647,
-    "damage" : 0,
-    "symbol" : " "
+  "Character": {
+    "hp": 2147483647,
+    "damage": 0,
+    "symbol": " "
   },
-  "EmptyFloor":{
-	"symbol_for_parse" : ".",
-	"symbol": " "
+  "EmptyFloor": {
+    "symbol_for_parse": ".",
+    "symbol": " "
   },
-  "Knight":{
-    "hp" : 10000,
-    "damage" : 20,
-    "symbol" : "K",
-    "mana" : 10000
+  "Knight": {
+    "hp": 10000,
+    "damage": 20,
+    "symbol": "K",
+    "mana": 10000
   },
-  "Princess":{
-    "symbol" : "P"
+  "Princess": {
+    "symbol": "P"
   },
-  "Wall":{
-    "symbol" : "#"
+  "Wall": {
+    "symbol": "#"
   },
-  "Health":{
-    "symbol" : "h",
-    "hp" : 200
+  "Health": {
+    "symbol": "h",
+    "hp": 200
   },
-  "Mana":{
-    "symbol" : "m",
-    "hp" : 200
+  "Mana": {
+    "symbol": "m",
+    "hp": 200
   },
-  "Projectile":{
-    "damage" : 25,
+  "Projectile": {
+    "damage": 25,
     "symbol": "*",
-    "cost" : 25
+    "cost": 25
   },
-  "Monster":{
-    "hp" : 100,
-	"visibility": 5,
-    "damage" : 25,
-    "symbol" : "M"
+  "Monster": {
+    "hp": 100,
+    "visibility": 5,
+    "damage": 25,
+    "symbol": "M"
+  },
+  "Zombie": {
+    "hp": 150,
+    "visibility": 7,
+    "damage": 40,
+    "symbol": "Z"
   }
 }
